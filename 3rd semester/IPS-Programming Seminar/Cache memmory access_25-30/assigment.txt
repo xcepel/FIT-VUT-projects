@@ -1,0 +1,53 @@
+Vliv vyrovnávacích pamětí (CACHE) na efektivitu přístupu do paměti
+==================================================================
+
+Zadavatel: P.Peringer                           (verze 2022-12-09)
+
+
+
+Zadání úkolu 3
+==============
+
+Použijte (a případně vylepšete) demo příklady p1-matmul a p2-bandwidth (viz
+[1]) na alespoň 2 různých počítačích a vyhodnoťte výsledky.  (Limit platí pro
+1 osobu, pokud pracujete ve dvojici budou min 4. Vyhněte se serverům na FIT.
+Pokud nemáte více strojů, udělejte si virtuální stroj a/nebo zkuste
+kontejner. Je dobré udělat více experimentů pro porovnání, případně vyzkoušet
+jiné podobné programy.)
+
+Zdůvodněte různé anomálie. Zamyslete se nad chybou měření (vliv zatížení CPU
+ostatními procesy, regulace kmitočtu CPU atd.) a nad dalšími souvislostmi
+(vliv použitých knihoven, optimalizací překladače atd.). Je vhodné si přečíst
+alespoň část z literatury [2] (především z kapitol 3 a 6).
+
+Vytvořte stručnou dokumentaci (stačí UTF-8 text v podobném stylu jako toto
+zadání + PDF obrázky -- to vše uložené v adresáři xjmeno??/). K výsledkům
+doplňte specifikaci použitých počítačů (CPU,RAM,CACHE).  Předpokládá se
+automaticky, že v dokumentaci budou jména autorů, úvod s přehledem použitých
+počítačů (pozor, některé nástroje sčítají velikosti cache přes všechna jádra),
+popis a vyhodnocení provedených experimentů a případně odkazy na literaturu.
+Pokud vylepšíte kód přiložte ho ve vhodně pojmenovaném podadresáři. Rozsah
+textu není kritický, důležitější je jeho obsah.
+
+
+Odevzdání
+=========
+
+Jeden soubor "xjmeno??.tar.gz" odevzdejte do neděle 8.1.2022 prostřednictvím
+IS k příslušnému termínu. Doporučuji odevzdat alespoň základní verzi dříve.
+
+
+Hodnocení
+=========
+
+Hodnocení proběhne tak, že projdu adresáře xjmeno/ a přidělím body v IS pro
+dané xjmeno. Pokud pracujete ve dvojici, udělejte dva xjmeno/ adresáře a sdílené
+dokumenty můžete odkazovat přes symlink.
+
+
+Literatura
+==========
+
+1. http://www.fit.vutbr.cz/~peringer/UNOFFICIAL/IPS/demo/ips-2022-12-08-examples.tar.gz
+
+2. https://www.akkadia.org/drepper/cpumemory.pdf

@@ -1,0 +1,13 @@
+./aut 1 "tak j" 1 <zadani.txt
+./aut 3 <zadani.txt
+./aut 1 "Alias" 1 "FILES" -1 <sudoers
+./aut 1 "Alias" 1 "FILES" -1 "mount" -1 "chgrp" -1 "Host " -1 <sudoers
+./aut 1 "env_k" 1 "root " 1 <sudoers
+./aut 2 "env_k" 1 "root " 1 <sudoers
+./aut 1 "(ALL)" 1 "rogal" -1 <sudoers
+./aut 1 "(ALL)" 1 "wheel" -1 <sudoers
+./aut 2 "Alias" 1 "SERVE" 1 <sudoers
+./aut 2 "root:" 1 "rogal" 1 <group
+./aut 1 "root:" 1 "rogal" 1 <group
+./aut 2 "root:" 1 "root," 1 "rogal" 1 <group
+./aut 2 "root," 1 "root:" 1 "rogal" 1 <group
