@@ -1,0 +1,848 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- saved from url=(0078)https://wis.fit.vutbr.cz/FIT/st/cwk.php.cs?title=Projekt1&csid=651682&id=12214 -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-2">
+<title>Wiki předmětu</title>
+<link rel="SHORTCUT ICON" href="https://wis.fit.vutbr.cz/images/favicon.ico" type="image/x-icon">
+
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="./Wiki předmětu_files/style8.css" type="text/css">
+<link rel="stylesheet" href="./Wiki předmětu_files/cwk-css.php" type="text/css">
+<script type="text/javascript">
+var ClockMonths = new Array("ledna", "února", "března", "dubna", "května", "června",
+"července", "srpna", "září", "října", "listopadu", "prosince");
+var ClockElm;
+var ClockDiff=0;
+document.cookie = "res=w:"+screen.width+",h:"+screen.height+",r:"+window.devicePixelRatio+",p:"+navigator.platform+",tp:"+navigator.maxTouchPoints+"; path=/";
+
+function ClockInit()
+{
+    if (!document.getElementById) return;
+    ClockElm = document.getElementById('clock');
+    if (!ClockElm || !ClockElm.innerHTML) return;
+    var ClockTm = new Date();
+    var datefmt = /^(\d\d?)[.]? ([^ ]+) (\d{4})\s(\d\d):(\d\d):(\d\d)$/;
+    var datep = datefmt.exec(ClockElm.innerHTML);
+    if (datep) {
+	var SrvClock = new Date();
+	SrvClock.setDate(datep[1]);
+	for (var i = 0; i<12; i++) {
+	    if (datep[2] == ClockMonths[i]) {
+		SrvClock.setMonth(i);
+	    }
+	}
+	SrvClock.setYear(datep[3]);
+	SrvClock.setHours(datep[4]);
+	SrvClock.setMinutes(datep[5]);
+	SrvClock.setSeconds(datep[6]);
+	ClockDiff = 500 + SrvClock.getTime()-ClockTm.getTime();
+    }
+    setInterval(UpdateClock, 1000);
+}
+
+function UpdateClock()
+{
+    var hr,min,sec,day,mon,year;
+
+    if (!ClockElm || !ClockElm.innerHTML) return;
+    var ClockTm = new Date();
+    ClockTm.setMilliseconds(ClockDiff+ClockTm.getMilliseconds());
+    if (ClockTm.getFullYear) year = ClockTm.getFullYear();
+    else year = ClockTm.getYear+1900;
+    mon = ClockTm.getMonth();
+    day = ClockTm.getDate();
+    hr = ClockTm.getHours();
+    min = ClockTm.getMinutes();
+    sec = ClockTm.getSeconds();
+    ClockElm.innerHTML = day+'. '+ClockMonths[mon]+' '+year+'\n '+(hr<=9?'0':'')+hr+':'+(min<=9?'0':'')+min+':'+(sec<=9?'0':'')+sec; 
+}
+
+function filter_empty(name)
+{
+    var i;
+    for (i = 0; i < document[name].elements.length; i++) {
+	var o = document.forms[name].elements[i];
+	if (o.type != 'text' && o.type != 'select-one') continue;
+	if (o.value == '') o.disabled = true;
+    }
+    return true;
+}
+</script>
+<style type="text/css">@font-face {
+    font-family: 'OpenSansPP';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Open Sans Regular'), local('OpenSans-Regular'), url(https://fonts.gstatic.com/s/opensans/v15/u-WUoqrET9fUeobQW7jkRYX0hVgzZQUfRDuZrPvH3D8.woff2) format('woff2');
+    unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+    font-family: 'OpenSansPP';
+    font-style: normal;
+    font-weight: 700;
+    src: local('Open Sans Bold'), local('OpenSans-Bold'), url(https://fonts.gstatic.com/s/opensans/v15/k3k702ZOKiLJc3WVjuplzIjoYw3YTyktCCer_ilOlhE.woff2) format('woff2');
+    unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+    font-family: 'OpenSansPP';
+    font-style: normal;
+    font-weight: 700;
+    src: local('Open Sans Bold'), local('OpenSans-Bold'), url(https://fonts.gstatic.com/s/opensans/v15/k3k702ZOKiLJc3WVjuplzBampu5_7CjHW5spxoeN3Vs.woff2) format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2212, U+2215;
+}
+@font-face {
+    font-family: 'OpenSansPP';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Open Sans Regular'), local('OpenSans-Regular'), url(https://fonts.gstatic.com/s/opensans/v15/cJZKeOuBrn4kERxqtaUH3ZBw1xU1rKptJj_0jans920.woff2) format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2212, U+2215;
+}
+
+#pp-2box, #pp-2box-small {
+    position: fixed !important;
+    display: block;
+    right: 23px;
+    bottom: 23px;
+    z-index: 2147483647;
+    width: 450px;
+    height: auto !important;
+    padding: 0;
+    margin: 0;
+    border: none;
+    border-radius: 7px;
+    box-shadow: 0 6px 40px rgba(0, 0, 0, 0.3);
+    background-color: #FFF;
+}
+
+#pp-2box>.pp-icon, #pp-2box-small>.pp-icon {
+    position: absolute !important;
+    display: block !important;
+    top: 14px;
+    left: -9px;
+    width: 64px;
+    height: 64px;
+    padding: 0;
+    margin: 0;
+    border: none;
+    background-color: transparent !important;
+    background-image: url(data:image/png;base64,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);
+    background-repeat: no-repeat;
+}
+
+#pp-2box>.close, #pp-2box-small>.close  {
+    position: absolute !important;
+    display: block !important;
+    top: 10px;
+    right: 10px;
+    width: 18px;
+    height: 18px;
+    padding: 0;
+    margin: 0;
+    border: none;
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASBAMAAACk4JNkAAAAAXNSR0IB2cksfwAAAC1QTFRFAAAA7+/37fH37vH47vH37+/07vL37vH27vD3rLjN1Nrm7fH3qLTK7vL27vH3sn2xfQAAAA90Uk5TAECfz/8wv+/A//+g/9Dw5R3l7wAAAHtJREFUeJxjYGBgVHYxEmAAAtYUFxcXtwAgK9wFBEqBQiVglnsAA4cLBCQwiLh4LnHxmuLiyLDFxeuUy5olLt4MV1xc1qw65eLizABU4nVmCZBEYsFkfZF0IEyBmdzAwPoEzPADOiEOzHoKclULkOEBchUD416X20CXAgAA3TJgepJfkQAAAABJRU5ErkJggg==);
+    background-repeat: no-repeat;
+    background-color: transparent !important;
+    cursor: pointer;
+}
+
+#pp-2box>.pp-headline, #pp-2box-small>.pp-headline {
+    display: block !important;
+    width: auto !important;
+    height: auto !important;
+    line-height: 45px;
+    padding: 11px 18px 0 69px;
+    margin: 0;
+    border: none;
+    font-family: 'OpenSansPP',  sans-serif !important;
+    font-size: 24px;
+    font-weight: 700;
+    text-transform: none;
+    text-align: left;
+    color: #00b9ff;
+    background: none !important;
+}
+
+#pp-2box>.pp-content {
+    display: block !important;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    line-height: 22px;
+    padding: 0 10px 17px 69px;
+    margin: -7px 0 0 0;
+    border: none;
+    font-family: 'OpenSansPP', sans-serif !important;
+    font-size: 14px;
+    font-weight: 400;
+    text-transform: none;
+    text-align: left;
+    color: #2e3337;
+    background: none !important;
+}
+
+#pp-2box>.pp-content>b {
+    display: inline !important;
+    width: auto !important;
+    height: auto !important;
+    padding: 0;
+    margin: 0;
+    border: none;
+    font-family: 'OpenSansPP', sans-serif !important;
+    font-size: 17px;
+    font-weight: 700;
+    text-transform: none;
+    text-align: left;
+    color: #2e3337;
+    background: none !important;
+}
+
+#pp-2box>.pp-footer {
+    display: table !important;
+    width: 100%;
+    height: auto !important;
+    padding: 23px 0;
+    margin: 0;
+    border-top: 1px solid #dbdbdb;
+    border-right: none;
+    border-bottom: none;
+    border-left: none;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    background: #f4f4f4 !important;
+}
+
+#pp-2box>.pp-footer>.pp-left-part {
+    display: block !important;
+    box-sizing: border-box !important;
+    float: left;
+    width: 50%;
+    height: auto !important;
+    padding-left: 15px;
+    padding-right: 20px;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin: 0;
+    border: none;
+    text-align: center;
+    background: none !important;
+}
+
+#pp-2box>.pp-footer>.pp-left-part>.pp-big-text {
+    display: block !important;
+    width: auto !important;
+    height: auto !important;
+    line-height: 35px;
+    padding: 0;
+    margin: 0;
+    border: none;
+    font-family: 'OpenSansPP', sans-serif !important;
+    font-size: 40px;
+    font-weight: 400;
+    text-transform: none;
+    text-align: center;
+    color: #2e3337;
+    background: none !important;
+}
+
+#pp-2box>.pp-footer>.pp-left-part>.pp-big-text>b {
+    display: inline !important;
+    width: auto !important;
+    height: auto !important;
+    padding: 0;
+    margin: 0;
+    border: none;
+    font-family: 'OpenSansPP', sans-serif !important;
+    font-size: 40px;
+    font-weight: 800;
+    text-transform: none;
+    text-align: right;
+    color: #2e3337;
+    background: none !important;
+}
+
+#pp-2box>.pp-footer>.pp-left-part>.pp-small-text {
+    display: block !important;
+    width: auto !important;
+    height: auto !important;
+    padding: 0;
+    margin: 0;
+    border: none;
+    font-family: 'OpenSansPP', sans-serif !important;
+    font-size: 13px;
+    color: #2e3337;
+    text-transform: none;
+    text-align: center;
+    background: none !important;
+}
+
+#pp-2box>.pp-footer>.pp-right-part {
+    display: block !important;
+    box-sizing: border-box !important;
+    float: right;
+    width: 50%;
+    height: auto !important;
+    padding-right: 15px;
+    padding-left: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin: 0;
+    border: none;
+    text-transform: none;
+    background: none !important;
+}
+
+#pp-2box>.pp-footer>.pp-right-part>.btn {
+    display: block !important;
+    width: 100%;
+    height: auto !important;
+    line-height: 20px !important;
+    padding: 13px 0;
+    margin: 0;
+    border: none;
+    border-radius: 5px;
+    box-shadow: none;
+    background-color: #7fb93c !important;
+    background-image: linear-gradient(-45deg, rgba(136, 196, 66, 0.84) 0%, rgba(127, 185, 60, 0.84) 100%) !important;
+    color: #FFF;
+    font-family: 'OpenSansPP', sans-serif !important;
+    font-size: 18px;
+    font-weight: 700;
+    text-transform: uppercase;
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.2s linear;
+}
+
+#pp-2box>.pp-footer>.pp-right-part>.btn:hover {
+    background: #2badce !important;
+}
+
+/* cerveny content popup */
+#pp-2box.pp-box-red>.pp-headline {
+    color: #f00;
+}
+
+#pp-2box.pp-box-red>.pp-footer>.pp-right-part>.btn {
+    background-image: none !important;
+    background-color: #f00 !important;
+}
+
+/* maly box */
+#pp-2box-small {
+    width: 325px;
+}
+
+#pp-2box-small>.pp-icon {
+    width: 50px;
+    height: 50px;
+    top: 10px;
+    left: -10px;
+    background-size: cover;
+}
+
+#pp-2box-small>.pp-headline {
+    font-size: 24px;
+    padding: 7px 0 2px 51px;
+    line-height: normal;
+}
+
+#pp-2box-small>.pp-content {
+    font-family: 'OpenSansPP', sans-serif !important;
+    font-size: 12px;
+    text-transform: none;
+    text-align: left;
+    color: #2e3337;
+    margin-left: 51px !important;
+    padding: 0 5px 12px 22px;
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAAXNSR0IB2cksfwAAAN5QTFRFAAAAgLdAgLs9gLs+gbs9gbw+gL9Af7o8gLs9gbw+gbw9grw+gr0+gLo8gr0/gr0+g74/grw/g74/hb9Ag75A2OvDr9WEh79Agbw8gr1A0ee3////4/HUg78/hMA/gLw9hL5DyOKq6vTejMNNhL8/hcA/udqU4/DTh79Gv92c8PfnkcZUhcBAhcA/2uvG3+7Oh8BGtdiN9PnulcdahcFAgrw/6fTd/v79+Pv0mstihsFAhMBAgbw++/34oM1sh8FAiMFH3e3Kp9J3hsFBgb1AhcE/g74/hsBAg71Ah8FCLen9IgAAAEp0Uk5TACCPz//PIJD/////j9D//8///5D///8gkP///////9D//////8/////////////////////Q///////QkP//kP////+Q/9DQkJAte9JXAAAAwElEQVR4nE2P2RrBMBBGB0EJQYoiWlvsqpbaat95/xcyERf+q8yc72RmADChcISQaDgGv8SJkUhSTErXacMghCYoZZnsH89Rxjg30VdcdVi+UOTcgtLPZ+WKqNqOCTX061izhmi2pGwD8k63x1hfDIaOM3IB/bHwJlMxm0vpuj4sKO15Yrlabxw5coMt7NCfeGJ/+HL/CDE1/3S+KD/wrxbALcNxoy+/B0e16oPbtubBUx/z0tzXXMUyt/j/21LvD8APGFI1VKajAAAAAElFTkSuQmCC);
+    background-repeat: no-repeat;
+    background-position: 0 0;
+
+}
+
+.pp-search {
+    display: block;
+    margin: 2px 0 4px 0;
+    font-family: Arial, Helvetica, sans-serif !important;
+    font-weight: 700;
+    text-decoration: none;
+    color: #f67b10;
+    line-height: 19px;
+    font-size: 12px;
+}
+
+.pp-search:active,
+.pp-search:hover,
+.pp-search:focus,
+.pp-search:visited,
+.pp-search:link {
+    text-decoration: none !important;
+    color: #f67b10 !important;
+}
+
+.pp-search-zbozi {
+    margin: 5px 0 0 0;
+    font-size: 14px;
+    padding: 0 !important;
+    border: 0 !important;
+}
+
+.pp-search-heureka {
+    font-size: 13px;
+    margin: 5% 0 0;
+}
+
+.product-detail__shop-offers-button .button--blue {
+    width: 100%;
+}
+
+.pp-search-pricemania.button--blue {
+    width: 100%;
+    background: #7fb93c;
+    margin-top: 10px;
+}
+
+.pp-search-pricemania.button--blue:hover {
+    background: #679b2a
+}
+
+.pp-search>span {
+    padding: 3px 10px;
+    border-radius: 2px;
+    margin-right: 5px;
+    background: #f67b10;
+    color: #ffffff;
+}
+
+.pp-search.pp-search-heureka.pp-search-najnakup {
+    margin-top: 10px;
+    min-height: auto;
+}
+
+.pp-search.pp-search-heureka>span {
+    border: 2px solid #679b2a;
+    background: #7fb93c;
+    border-radius: 4px;
+    width: 134px;
+    box-sizing: border-box;
+    height: 35px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 35px;
+    padding: 0;
+    margin-top: 5%;
+}
+
+.scope-heureka div.product div.wherebuy .price .pp-search.pp-search-heureka>span {
+    font-size: 13px;
+    color: #fff;
+}
+
+.pp-search.pp-search-heureka:hover>span {
+    background: #679b2a;
+}
+
+.pp-search.pp-search-zbozi>span {
+    border: 2px solid #679b2a;
+    background-color: #fff;
+    border-radius: 4px;
+    color: #679b2a;
+    width: 100%;
+    box-sizing: border-box;
+    height: 44px;
+    line-height: 44px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pp-search.pp-search-zbozi:hover>span {
+    background-color: #679b2a;
+    color: #fff;
+}
+
+.pp-search>span>span, .pp-search-pricemania.button--blue>span>span {
+    display: inline-block;
+    padding: 5px;
+    margin-right: 5px;
+    background-size: cover;
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QAAAAAAAD5Q7t/AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4gEGEiEfkWYJTQAAALpJREFUOMvN0jFKQ0EUheHvPFMq2LsFCwVLwUJiYWPtAt4GxB24GSs3oEVcgJ0gKQWJBFJrI1wbHwQRkXmNfzdw/8PcORO/UFWbOMIUh5jgOcnZMJNvwgYOcIJjbOEed5gleauqxyS7gzP5EvdwiX084BbnSV5/uNjH+iFV1eMK15j5O/MkT6mqF+xo4yJVVdp5HxugM5KWgNV6E12DfIqbIWT0Ci2PuML28An/RwvLEf6yQ49Fg7xA/wkw/D45daR6WgAAAABJRU5ErkJggg==')
+}
+
+.pp-search.pp-search-heureka>span>span {
+    padding: 8px;
+    margin-right: 6px;
+}
+
+.pp-search-zbozi>span>span {
+    margin-right: 6px;
+    padding: 8px;
+    display: flex;
+    margin-top: -1px;
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAAXNSR0IB2cksfwAAAHhQTFRFAAAAgL9Afrg9f7g8gLk8gLk8f7g9VapVfbk8fro7gLk8f7k8f7k7f7o7gLMzgLk8gLo6gLk9f7o8gLo8frg8erg9frg9f7k8gLk9fLs+gLk8f7k8frk9gLk8gbo/hbxF2erF9/v0h71HvNqZ2erGgrtBfrk8f7k8yd54/gAAACh0Uk5TAAxLkMzQsQM3fcDNjkoK1DCk1aJdGWXoUCnk/3H2//////////9N5WnfXz8AAABbSURBVHicY2CAAEYmZhZWNiiHnYOTi5uHl4+BH8wVEBQSFhEFM1lBhJg4swQCSDIwSEmjABkGVL60LLqANH4BOXk0AQVFJVQBZRVVAmZgFxBH5YszqKkj89XVAB82FtoI5WUTAAAAAElFTkSuQmCC');
+}
+
+.pp-search-zbozi:hover>span>span {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QAAAAAAAD5Q7t/AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4gEGEiEfkWYJTQAAALpJREFUOMvN0jFKQ0EUheHvPFMq2LsFCwVLwUJiYWPtAt4GxB24GSs3oEVcgJ0gKQWJBFJrI1wbHwQRkXmNfzdw/8PcORO/UFWbOMIUh5jgOcnZMJNvwgYOcIJjbOEed5gleauqxyS7gzP5EvdwiX084BbnSV5/uNjH+iFV1eMK15j5O/MkT6mqF+xo4yJVVdp5HxugM5KWgNV6E12DfIqbIWT0Ci2PuML28An/RwvLEf6yQ49Fg7xA/wkw/D45daR6WgAAAABJRU5ErkJggg==')
+}
+</style></head>
+<body onload="ClockInit()">
+<table class="noprint" role="navigation" width="100%" border="0" cellpadding="0" cellspacing="0" style="background-color: #3498db">
+<tbody><tr><td><a href="https://www.fit.vut.cz/.cs"><img class="FITlogo" src="./Wiki předmětu_files/fitnewz.png" alt="FIT"></a></td>
+<td class="mitembg" nowrap=""><a class="stab" href="https://wis.fit.vutbr.cz/FIT/st/index.php.cs"><span style="font-size:24px;line-height:14px">&nbsp;&#8962;&nbsp;</span></a></td>
+<th class="mitem hide-m"><a class="stab" href="https://wis.fit.vutbr.cz/FIT/st/study.php.cs">studia</a></th>
+<th class="mitem"><a class="stab" href="https://wis.fit.vutbr.cz/FIT/st/courses.php.cs">předměty</a></th>
+<th class="mitem"><a class="stabs" href="https://wis.fit.vutbr.cz/FIT/st/study-v.php.cs">termíny</a></th>
+<th class="mitem"><a class="stab" href="https://wis.fit.vutbr.cz/FIT/st/reg.php.cs">registrace</a></th>
+<th class="mitem hide-m"><a class="stab" href="https://wis.fit.vutbr.cz/FIT/st/admin.php.cs">hesla</a></th>
+<th class="mitem hide-m"><a class="stab" href="https://wis.fit.vutbr.cz/FIT/st/other.php.cs">ostatní</a></th>
+<td class="mitembg hide-d hide-t"><a class="stab" href="https://wis.fit.vutbr.cz/FIT/st/other.php.cs"><span style="font-size: 16px;line-height:16px">&nbsp;&gt;&nbsp;</span></a></td><td class="mitembg hide-m"><a class="stab" href="https://wis.fit.vutbr.cz/FIT/st/logoff.php.cs?logoff=1"><span style="font-size:16px;line-height:16px">&nbsp;&#9032;&nbsp;</span></a></td><th class="mitem"><a class="stab" href="https://wis.fit.vutbr.cz/FIT/st/cwk.php.en?title=Projekt1&amp;csid=651682&amp;id=12214">&nbsp;EN&nbsp;</a></th></tr>
+</tbody></table>
+<table cellpadding="4" width="100%" border="0">
+<tbody><tr valign="top"><td style="width: 90%"><h1>Wiki předmětu</h1></td>
+<td style="text-align: right; white-space: nowrap"><div id="clock">31. srpna 2022
+ 22:25:06</div></td></tr></tbody></table>
+<div role="main" class="content">
+<table cellpadding="4" width="100%" bgcolor="white"><tbody><tr><td>Login xducho07, <b>Duchoň Radek, Bc.</b>, 2. ročník NSEC, prezenční, FIT<br>
+Ak. rok 2021/2022 studium č.2: řádný zápis<p></p></td><td align="right"><a href="https://wis.fit.vutbr.cz/FIT/st/course-sl.php.cs?id=651682">Zpět na termíny</a>&nbsp;</td></tr></tbody></table>
+<table class="res" style="max-width: 100%" cellpadding="0"><tbody><tr valign="top"><td style="background-color: #f0f0f0">
+<div class="leftpane">
+    <div class="home">
+[[<a class="internal" href="https://wis.fit.vutbr.cz/FIT/st/cwk.php.cs?title=Main_Page&amp;csid=651682&amp;id=12214" id="wiki__top" accesskey="h" title="[H]">IZP Home</a>]]
+    </div>
+    <div id="toolbar" class="toolbar">
+   <div class="tb_main">
+
+<p>
+
+Navigace
+</p>
+
+<ul>
+<li class="level1"><a href="https://wis.fit.vutbr.cz/FIT/st/cwk.php.cs?title=Main_Page&amp;csid=651682&amp;id=12214" class="internal" title="Hlavní stránka">Hlavní stránka</a></li>
+<li class="level1"><span class="curid"><a href="https://wis.fit.vutbr.cz/FIT/st/cwk.php.cs?title=Projekt1&amp;action=recent&amp;csid=651682&amp;id=12214" class="internal" title="Projekt1">Poslední změny</a></span></li>
+<li class="level1"><a href="https://wis.fit.vutbr.cz/FIT/st/cwk.php.cs?title=Help:Main_Page&amp;csid=651682&amp;id=12214" class="internal" title="Help:Hlavní stránka">Nápověda</a></li>
+</ul>
+
+<p>Stránka</p><div class="tb_box"><form action="https://wis.fit.vutbr.cz/FIT/st/cwk.php.cs?title=Projekt1&amp;csid=651682&amp;id=12214" class="search" id="form_search" method="get"><div class="searchform">
+<input type="hidden" name="csid" value="651682">
+<input type="hidden" name="id" value="12214">
+<input type="text" autocomplete="off" id="qsearch" accesskey="f" name="search" class="forminput" title="Enter search text" value="">
+<input type="submit" name="dogo" value="Zobrazit" class="button" title="Zobrazit"> <input type="submit" name="dosearch" value="Hledat" class="button" title="Hledat">
+</div></form>
+</div>
+
+
+<p>
+
+Nástroje
+</p>
+
+<ul>
+<li class="level1"><span class="curid"><a href="https://wis.fit.vutbr.cz/FIT/st/cwk.php.cs?title=Projekt1&amp;action=backlink&amp;csid=651682&amp;id=12214" class="internal" title="Projekt1">Odkazuje sem</a></span></li>
+<li class="level1"><span class="curid"><a href="https://wis.fit.vutbr.cz/FIT/st/cwk.php.cs?title=Projekt1&amp;action=upload&amp;ns=IZP&amp;csid=651682&amp;id=12214" class="internal" title="Projekt1">Nahrát soubor</a></span></li>
+<li class="level1"><span class="curid"><a href="https://wis.fit.vutbr.cz/FIT/st/cwk.php.cs?title=Projekt1&amp;action=fileinfo&amp;ns=IZP&amp;list=1&amp;csid=651682&amp;id=12214" class="internal" title="Projekt1">Seznam souborů</a></span></li>
+<li class="level1"><span class="curid"><a href="https://wis.fit.vutbr.cz/FIT/st/cwk.php.cs?title=Projekt1&amp;action=index&amp;csid=651682&amp;id=12214" class="internal" title="Projekt1">Seznam stránek</a></span></li>
+<li class="level1"><span class="curid"><a href="https://wis.fit.vutbr.cz/FIT/st/cwk.php.cs?title=Projekt1&amp;action=history&amp;csid=651682&amp;id=12214" class="internal" title="Projekt1">Historie stránky</a></span></li>
+</ul>
+</div>   </div>
+</div>
+</td><td width="100%">
+<div class="rightpane maxw8">
+    <div class="bar" id="bar_top">
+    <ul class="bar_menu">
+<li><a href="https://wis.fit.vutbr.cz/FIT/st/cwk.php.cs?title=Projekt1&amp;action=show&amp;rev=0&amp;csid=651682&amp;id=12214" class="selected" title="Stránka" rel="nofollow">Stránka</a></li><li><a href="https://wis.fit.vutbr.cz/FIT/st/cwk.php.cs?title=Projekt1&amp;action=source&amp;rev=0&amp;csid=651682&amp;id=12214" title="Zdroj" rel="nofollow">Zdroj</a></li><li><a href="https://wis.fit.vutbr.cz/FIT/st/cwk.php.cs?title=Projekt1&amp;action=subscribe&amp;csid=651682&amp;id=12214" title="Sledovat" rel="nofollow">Sledovat</a></li>  </ul>
+    </div>
+    <div class="page">
+<!-- wikipage start -->
+<h1>Projekt1</h1><div class="toc"><table class="toc"><tbody><tr><th colspan="8">Obsah</th></tr>
+<tr><td nowrap="" width="10">1</td><td colspan="7"> <a class="internal" href="https://wis.fit.vutbr.cz/FIT/st/cwk.php.cs?title=Projekt1&amp;csid=651682&amp;id=12214#Projekt_1_-_Ov%C4%9B%C5%99ov%C3%A1n%C3%AD_s%C3%ADly_hesel_(pr%C3%A1ce_s_textem)">Projekt 1 - Ověřování síly hesel (práce s textem)</a></td></tr><tr><td>&nbsp;</td><td nowrap="" width="10">1.1</td><td colspan="6"> <a class="internal" href="https://wis.fit.vutbr.cz/FIT/st/cwk.php.cs?title=Projekt1&amp;csid=651682&amp;id=12214#Motivace_projektu">Motivace projektu</a></td></tr><tr><td>&nbsp;</td><td nowrap="" width="10">1.2</td><td colspan="6"> <a class="internal" href="https://wis.fit.vutbr.cz/FIT/st/cwk.php.cs?title=Projekt1&amp;csid=651682&amp;id=12214#Popis_projektu">Popis projektu</a></td></tr><tr><td>&nbsp;</td><td nowrap="" width="10">1.3</td><td colspan="6"> <a class="internal" href="https://wis.fit.vutbr.cz/FIT/st/cwk.php.cs?title=Projekt1&amp;csid=651682&amp;id=12214#Detailn%C3%AD_specifikace">Detailní specifikace</a></td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td nowrap="" width="10">1.3.1</td><td colspan="5"> <a class="internal" href="https://wis.fit.vutbr.cz/FIT/st/cwk.php.cs?title=Projekt1&amp;csid=651682&amp;id=12214#P%C5%99eklad_a_odevzd%C3%A1n%C3%AD_zdrojov%C3%A9ho_souboru">Překlad a odevzdání zdrojového souboru</a></td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td nowrap="" width="10">1.3.2</td><td colspan="5"> <a class="internal" href="https://wis.fit.vutbr.cz/FIT/st/cwk.php.cs?title=Projekt1&amp;csid=651682&amp;id=12214#Syntax_spu%C5%A1t%C4%9Bn%C3%AD">Syntax spuštění</a></td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td nowrap="" width="10">1.3.3</td><td colspan="5"> <a class="internal" href="https://wis.fit.vutbr.cz/FIT/st/cwk.php.cs?title=Projekt1&amp;csid=651682&amp;id=12214#%C3%9Arovn%C4%9B_bezpe%C4%8Dnosti_(kontrolovan%C3%A1_pravidla)">Úrovně bezpečnosti (kontrolovaná pravidla)</a></td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td nowrap="" width="10">1.3.4</td><td colspan="5"> <a class="internal" href="https://wis.fit.vutbr.cz/FIT/st/cwk.php.cs?title=Projekt1&amp;csid=651682&amp;id=12214#Statistiky">Statistiky</a></td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td nowrap="" width="10">1.3.5</td><td colspan="5"> <a class="internal" href="https://wis.fit.vutbr.cz/FIT/st/cwk.php.cs?title=Projekt1&amp;csid=651682&amp;id=12214#Implementa%C4%8Dn%C3%AD_detaily">Implementační detaily</a></td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td nowrap="" width="10">1.3.5.1</td><td colspan="4"> <a class="internal" href="https://wis.fit.vutbr.cz/FIT/st/cwk.php.cs?title=Projekt1&amp;csid=651682&amp;id=12214#Vstupn%C3%AD_data_(seznam_hesel)">Vstupní data (seznam hesel)</a></td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td nowrap="" width="10">1.3.5.2</td><td colspan="4"> <a class="internal" href="https://wis.fit.vutbr.cz/FIT/st/cwk.php.cs?title=Projekt1&amp;csid=651682&amp;id=12214#V%C3%BDstup_programu">Výstup programu</a></td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td nowrap="" width="10">1.3.5.3</td><td colspan="4"> <a class="internal" href="https://wis.fit.vutbr.cz/FIT/st/cwk.php.cs?title=Projekt1&amp;csid=651682&amp;id=12214#Omezen%C3%AD_v_projektu">Omezení v projektu</a></td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td nowrap="" width="10">1.3.6</td><td colspan="5"> <a class="internal" href="https://wis.fit.vutbr.cz/FIT/st/cwk.php.cs?title=Projekt1&amp;csid=651682&amp;id=12214#Neo%C4%8Dek%C3%A1van%C3%A9_chov%C3%A1n%C3%AD">Neočekávané chování</a></td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td nowrap="" width="10">1.3.7</td><td colspan="5"> <a class="internal" href="https://wis.fit.vutbr.cz/FIT/st/cwk.php.cs?title=Projekt1&amp;csid=651682&amp;id=12214#P%C5%99%C3%ADklady_vstup%C5%AF_a_v%C3%BDstup%C5%AF">Příklady vstupů a výstupů</a></td></tr><tr><td>&nbsp;</td><td nowrap="" width="10">1.4</td><td colspan="6"> <a class="internal" href="https://wis.fit.vutbr.cz/FIT/st/cwk.php.cs?title=Projekt1&amp;csid=651682&amp;id=12214#Hodnocen%C3%AD">Hodnocení</a></td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td nowrap="" width="10">1.4.1</td><td colspan="5"> <a class="internal" href="https://wis.fit.vutbr.cz/FIT/st/cwk.php.cs?title=Projekt1&amp;csid=651682&amp;id=12214#Priority_funkcionality">Priority funkcionality</a></td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td nowrap="" width="10">1.4.2</td><td colspan="5"> <a class="internal" href="https://wis.fit.vutbr.cz/FIT/st/cwk.php.cs?title=Projekt1&amp;csid=651682&amp;id=12214#Pr%C3%A9miov%C3%A9_%C5%99e%C5%A1en%C3%AD">Prémiové řešení</a></td></tr></tbody></table></div>
+
+<p>
+
+<b>Legenda:</b>
+</p>
+
+<p>
+
+<span style="color:red">Červeně označený text</span> značí změnu zadání. Na změnu zadání bude upozorněno na fóru.<br>
+
+<span style="color:blue">Modře označený text</span> upřesňuje zadání. Takto označené fráze nebudou mít na hodnocení téměř žádny vliv.<br>
+
+</p>
+
+<h1><span><a class="anchor" name="Projekt_1_-_Ověřování_síly_hesel_(práce_s_textem)">Projekt 1 - Ověřování síly hesel (práce s textem)</a></span></h1>
+
+<h2><span><a class="anchor" name="Motivace_projektu">Motivace projektu</a></span></h2>
+
+<p>
+
+Snad všichni známe tu situaci, kdy si chceme vytvořit nové heslo do nějakého systému, ale ten nás pořád otravuje nesmyslnými požadavky na formát hesla. I když jednoduchá kombinatorika říka, že většina těchto pravidel je zbytečná a nejbezpečnější je prostě vytvořit dostatečně dlouhé heslo, pravidla pořád existují a uživatelé se s nimi musí naučit žít. V tomto projektu se na daný problém podíváme z opačné strany, konkrétně si vyzkoušíme, jak takový jednoduchý systém ověřující sílu hesel naprogramovat.
+</p>
+
+<h2><span><a class="anchor" name="Popis_projektu">Popis projektu</a></span></h2>
+
+<p>
+
+Cílem projektu je vytvořit program, který na vstupu dostane sadu hesel a pro každé z nich ověří, jestli heslo splňuje všechna (pevně zadaná) požadovaná pravidla. Ta hesla, která projdou kontrolou, budou vypisována na výstup, ostatní budou zahozena.
+</p>
+
+<h2><span><a class="anchor" name="Detailní_specifikace">Detailní specifikace</a></span></h2>
+
+<p>
+
+Program implementujte ve zdrojovém souboru "pwcheck.c". Vstupní data (seznam hesel) budou čtena ze standardního vstupu (stdin), výstup (filtrovaný seznam hesel) bude tisknut na standardní výstup (stdout).
+</p>
+
+<h3><span><a class="anchor" name="Překlad_a_odevzdání_zdrojového_souboru">Překlad a odevzdání zdrojového souboru</a></span></h3>
+
+<p>
+
+Odevzdání: Odevzdejte zdrojový soubor <i>pwcheck.c</i> prostřednictvím informačního systému.
+</p>
+
+<p>
+
+Překlad: Program překládejte s následujícími argumenty:
+</p>
+<pre>$ gcc -std=c99 -Wall -Wextra -Werror pwcheck.c -o pwcheck </pre>
+
+<h3><span><a class="anchor" name="Syntax_spuštění">Syntax spuštění</a></span></h3>
+
+<p>
+
+Program se spouští v následující podobě: (./pwcheck značí umístění a název programu):
+</p>
+<pre>./pwcheck LEVEL PARAM [--stats] </pre>
+
+<p>
+
+Program je spouštěn se dvěma pevně zadanými argumenty <tt>LEVEL</tt> a <tt>PARAM</tt> a s jedním volitelným argumentem <tt>--stats</tt>, případně zadaným na třetí pozici:</p><dl>
+<dt><tt>LEVEL</tt></dt>
+<dd>celé číslo v intervalu [1, 4], které určuje požadovanou <i>úroveň bezpečnosti</i> (viz níže)</dd>
+<dt><tt>PARAM</tt></dt>
+<dd>kladné celé číslo, které určuje dodatečný <i>parametr pravidel</i> (viz níže)</dd>
+<dt><tt>--stats</tt></dt>
+<dd>pokud je zadané, určuje, zda se na konci programu mají vypsat souhrnné statistiky analyzovaných hesel</dd>
+</dl>
+
+<p></p>
+
+<h3><span><a class="anchor" name="Úrovně_bezpečnosti_(kontrolovaná_pravidla)">Úrovně bezpečnosti (kontrolovaná pravidla)</a></span></h3>
+
+<p>
+
+Jsou definovány celkem 4 úrovně bezpečnosti vyjádřeny pomocí 4 pravidel. Úroveň bezpečnosti určuje, že hesla musí splňovat všechna pravidla na dané a nižší úrovni. Tzn. např. úroveň bezpečnosti 3 specifikuje, že hesla musí splňovat pravidla 1, 2 a 3.
+</p>
+
+<p>
+
+Některá pravidla jsou parametrizovatelná celým číslem zadaným pomocí argumentu programu <tt>PARAM</tt>. V následujícím seznamu je tento parametr označen jako X.
+</p>
+
+<p>
+
+Seznam pravidel:
+</p>
+
+<ol>
+<li class="level1">Heslo obsahuje alespoň 1 velké a 1 malé písmeno.</li>
+<li class="level1">Heslo obsahuje znaky z alespoň X skupin <span style="color:blue">(v případě, že je číslo X větší než 4, myslí se tím všechny skupiny)</span>. Uvažované skupiny jsou:
+<ul>
+<li class="level2">malá písmena (a-z)</li>
+<li class="level2">velká písmena (A-Z)</li>
+<li class="level2">čísla (0-9)</li>
+<li class="level2">speciální znaky (podporované musí být alespoň nealfanumerické znaky z ASCII tabulky na pozicích <span style="text-decoration:line-through;color:gray">33-126</span> <span style="color:red">32-126, tedy včetně mezery</span>)</li>
+</ul>
+</li>
+<li class="level1">Heslo neobsahuje sekvenci stejných znaků délky alespoň X.</li>
+<li class="level1">Heslo neobsahuje dva stejné podřetězce délky alespoň X.</li>
+</ol>
+
+<h3><span><a class="anchor" name="Statistiky">Statistiky</a></span></h3>
+
+<p>
+
+Pokud je zadaný argument programu <tt>--stats</tt>, program musí na konec výstupu vypsat celkové statistiky ve formátu:
+</p>
+<pre>Statistika:
+Ruznych znaku: NCHARS
+Minimalni delka: MIN
+Prumerna delka: AVG
+</pre>
+
+<p>
+
+kde <tt>NCHARS</tt> je <i>počet různých znaků</i> vyskytujících se napříč všemi hesly, <tt>MIN</tt> je <i>délka nejkratšího hesla</i> (resp. hesel) a <tt>AVG</tt> je <i>průměrná délka hesla</i> (aritmetický průměr) zaokrouhlená na 1 desetiné místo. Statistiky zahrňují i hesla, která byla zahozena.
+</p>
+
+<h3><span><a class="anchor" name="Implementační_detaily">Implementační detaily</a></span></h3>
+
+<h4><span><a class="anchor" name="Vstupní_data_(seznam_hesel)">Vstupní data (seznam hesel)</a></span></h4>
+
+<p>
+
+Seznam hesel je programu předán na standardním vstupu (stdin). Každé heslo je zadáno na samostatném řádku a obsahuje pouze ASCII textová data, kromě znaku nového řádku. Maximální délka hesla je 100 znaků, jinak se jedná o nevalidní data. Program musí podporovat neomezený počet hesel na vstupu.
+</p>
+
+<h4><span><a class="anchor" name="Výstup_programu">Výstup programu</a></span></h4>
+
+<p>
+
+Program na standardní výstup (stdout) vypisuje hesla ze vstupního seznamu, každé na samostatný řádek, která splňují požadovanou úroveň bezpečnosti zadanou jako argument programu <tt>LEVEL</tt>. Hesla musí být vypsána beze změny a ve stejném pořadí, v jakém se objevila na vstupu.
+</p>
+
+<p>
+
+Za výstupním seznamem hesel pak program volitelně vypisuje statistiku (viz. <a href="https://wis.fit.vutbr.cz/FIT/st/cwk.php.cs?title=Projekt1&amp;csid=651682&amp;id=12214#Statistiky" title="Projekt1 &#8629;" class="internal">Statistiky</a>).
+</p>
+
+<h4><span><a class="anchor" name="Omezení_v_projektu">Omezení v projektu</a></span></h4>
+
+<p>
+
+Je zakázané použít následující funkce:
+</p>
+
+<ul>
+<li class="level1">volání funkcí z knihoven <tt>string.h</tt> a <tt>ctype.h</tt> - cílem projektu je naučit se implementovat dané funkce ručně,</li>
+<li class="level1">volání z rodiny <tt>malloc</tt> a <tt>free</tt> - práce s dynamickou pamětí není v tomto projektu zapotřebí,</li>
+<li class="level1">volání z rodiny <tt>fopen</tt>, <tt>fclose</tt>, <tt>fscanf</tt>, ... - práce se soubory (dočasnými) není v tomto projektu žádoucí,</li>
+<li class="level1">volání funkce <tt>exit</tt> - cílem projektu je naučit se vytvořit programové konstrukce, které dokáží zpracovat neočekávaný stav programu a případně program řádně ukončit návratem z funkce main.</li>
+</ul>
+
+<p>
+
+<span style="color:blue">Program musí vyhovovat standardu ISO C99. Jsou povoleny pouze hlavičkové soubory: <tt>stdio.h</tt>, <tt>stdlib.h</tt>, <tt>stdbool.h</tt> a případně (není nutné pro funkcionalitu) <tt>assert.h</tt>, <tt>errno.h</tt> a <tt>limits.h</tt>.</span>
+</p>
+
+<h3><span><a class="anchor" name="Neočekávané_chování">Neočekávané chování</a></span></h3>
+
+<p>
+
+Na chyby za běhu programu reagujte obvyklým způsobem: na neočekávaná vstupní data, formát vstupních dat nebo chyby při volání funkcí reagujte přerušením programu se stručným a výstižným chybovým hlášením na příslušný výstup a odpovídajícím návratovým kódem. Hlášení budou v kódování ASCII česky nebo anglicky.
+</p>
+
+<h3><span><a class="anchor" name="Příklady_vstupů_a_výstupů">Příklady vstupů a výstupů</a></span></h3>
+
+<p>
+
+Pomocný soubor se seznamem hesel:
+</p>
+<pre>$ cat hesla.txt
+1234567890
+Password
+Heslo123
+Mojevelmidlouhehesloscislem0
+IZP2021:fit@vut.cz
+</pre>
+
+<p>
+
+Příklady spuštění:
+</p>
+<pre>./pwcheck 1 1 &lt;hesla.txt
+Password
+Heslo123
+Mojevelmidlouhehesloscislem0
+IZP2021:fit@vut.cz
+</pre>
+<pre>./pwcheck 2 3 &lt;hesla.txt
+Heslo123
+Mojevelmidlouhehesloscislem0
+IZP2021:fit@vut.cz
+</pre>
+<pre>./pwcheck 3 2 &lt;hesla.txt
+Heslo123
+Mojevelmidlouhehesloscislem0
+IZP2021:fit@vut.cz
+</pre>
+<pre>./pwcheck 4 2 &lt;hesla.txt
+Heslo123
+IZP2021:fit@vut.cz
+</pre>
+<pre>./pwcheck 2 4 --stats &lt;hesla.txt
+IZP2021:fit@vut.cz
+Statistika:
+Ruznych znaku: 36
+Minimalni delka: 8
+Prumerna delka: 14.4
+</pre>
+
+<h2><span><a class="anchor" name="Hodnocení">Hodnocení</a></span></h2>
+
+<p>
+
+<span style="color:blue">Funkcionalita vašeho programu bude hodnocena na strojích s operačním systémem GNU Linux.</span>
+</p>
+
+<p>
+
+Na výsledné hodnocení mají hlavní vliv následující faktory:
+</p>
+
+<ul>
+<li class="level1">přeložitelnost zdrojového souboru,</li>
+<li class="level1">formát zdrojového souboru (členění, zarovnání, komentáře, vhodně zvolené identifikátory),</li>
+<li class="level1">dekompozice problému na podproblémy (vhodné funkce, vhodná délka funkcí a parametry funkcí),</li>
+<li class="level1">správná volba datových typů, případně tvorba nových typů,</li>
+<li class="level1">správná funkcionalita filtrování hesel,</li>
+<li class="level1">ošetření chybových stavů.</li>
+</ul>
+
+<h3><span><a class="anchor" name="Priority_funkcionality">Priority funkcionality</a></span></h3>
+
+<ol>
+<li class="level1">Detekce jednotlivých pravidel: jelikož každá úroveň zabezpečení vyžaduje ověření všech pravidel nižší úrovně, dává smysl jednotlivá pravidla implementovat v pořadí, jak jsou zadána.</li>
+<li class="level1">Vypisování statistik.</li>
+<li class="level1">Další (prémiové) rozšíření funkcionality.</li>
+</ol>
+
+<h3><span><a class="anchor" name="Prémiové_řešení">Prémiové řešení</a></span></h3>
+
+<p>
+
+Prémiové řešení je dobrovolné a lze za něj získat bonusové body. Podmínkou pro udělení prémiových bodů je výborné vypracování povinných částí projektu zadání. Výsledné hodnocení je plně v kompetenci vyučujího, který bude projekt hodnotit. Výše prémiových bodů závisí také na sofistikovanosti řešení.
+</p>
+
+<p>
+
+Navrhované rozšíření:
+</p>
+
+<ul>
+<li class="level1">Pokročilé načítání argumentů příkazové řádky (až 1 bod): program nevyžaduje argumenty pouze na pevných pozicích, ale je možné zadat úroveň zabezpečení a parametr pravidel také pomocí volitelných přepínačů. Syntax spuštění:</li>
+</ul>
+<pre>./pwcheck [-l LEVEL] [-p PARAM] [--stats]</pre>
+
+<p>
+
+přičemž jednotlivé přepínače mohou být zadány v libovolném pořadí. Při nezadání přepínače je výchozí hodnota příslušného argumentu 1. Upozornění: program v rozšířené formě musí stále akceptovat argumenty příkazové řádky původní, nerozšířené varianty: 
+</p>
+<pre>./pwcheck LEVEL PARAM [--stats]</pre>
+<div class="clearer"></div>   <!-- wikipage end -->
+    </div>
+
+    <div class="footer">
+      <div class="wiki_top"><a href="https://wis.fit.vutbr.cz/FIT/st/cwk.php.cs?title=Projekt1&amp;csid=651682&amp;id=12214#top" onclick="window.scrollTo(0, 0)" title="Nahoru">Nahoru</a>
+      </div>
+      <div class="meta">
+        <div class="user">
+    </div>
+      <div class="doc">Id stránky: 155, zobrazena: 152590, verze: 17889, dne: 2021-11-23 10:26:39 uložil: smrcka</div>
+      </div>
+    </div>
+</div>
+</td></tr>
+</tbody></table>
+</div>
+<div class="noprint">
+<address>&#169;Fakulta informačních technologií VUT, Božetěchova 2, 612 00 Brno<br>Připomínky zasílejte na adresu <a href="mailto:lampa@fit.vut.cz">lampa@fit.vut.cz</a></address></div>
+
+
+</body></html>

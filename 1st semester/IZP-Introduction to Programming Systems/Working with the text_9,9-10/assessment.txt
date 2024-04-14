@@ -1,0 +1,137 @@
+IZP - Hodnoceni 1. ulohy 
+
+9.9: celkem bodu
+
+====== Prehled hodnoceni ==========
+1: uhlednost kodu
+0.9: komentare
+1: identifikatory
+1: spravna volba datovych typu
+1: rozklad na funkce a vyuziti funkci
+: Level 1
+0.3:ok: pwcheck 1 1 <hesla.txt >1_0
+0.2:ok: pwcheck 1 1 <hesla_1_unsafe.txt >1_1
+0.2:ok: pwcheck 1 1 <hesla_1_safe.txt >1_2
+0.2:ok: pwcheck 1 1 <hesla_mixed.txt >1_3
+: Level 2
+0.3:ok: pwcheck 2 3 <hesla.txt >2_0
+0.2:ok: pwcheck 2 2 <hesla_2_unsafe.txt >2_1
+0.2:ok: pwcheck 2 1 <hesla_2_safe.txt >2_2
+0.2:ok: pwcheck 2 4 <hesla_mixed.txt >2_3
+: Level 3
+0.3:ok: pwcheck 3 2 <hesla.txt >3_0
+0.2:ok: pwcheck 3 1 <hesla_3_unsafe.txt >3_1
+0.2:ok: pwcheck 3 4 <hesla_3_safe.txt >3_2
+0.2:ok: pwcheck 3 3 <hesla_mixed.txt >3_3
+: Level 4
+0.3:ok: pwcheck 4 2 <hesla.txt >4_0
+0.2:ok: pwcheck 4 2 <hesla_4_unsafe.txt >4_1
+0.2:ok: pwcheck 4 4 <hesla_4_safe.txt >4_2
+0.2:ok: pwcheck 4 3 <hesla_mixed.txt >4_3
+: Statistiky + komplikovanejsi
+0.3:ok: pwcheck 2 4 --stats <hesla.txt >5_0
+0.2:ok: pwcheck 2 4 --stats <hesla_nchars.txt >5_1
+0:spatne: pwcheck 1 1 --stats <hesla_empty.txt >6_1
+0.2:ok: pwcheck 4 4 <hesla_overlapping.txt >6_3
+: Bonus
+0:spatne: pwcheck --stats <hesla.txt >8_1
+0:spatne: pwcheck -l 2 <hesla.txt >8_2
+0:spatne: pwcheck --stats -p 2 -l 3 <hesla.txt >8_3
+0.2:ok: duplicitni parametr
+0.1:ok: pwcheck 1 1 <hesla_empty_line.txt
+0.1:ok: pwcheck 1 1 --stats <hesla_whitespaces.txt
+0.1:ok: pwcheck 3 101 <hesla_big_level.txt
+0.1:ok: reakce na neocekavane argumenty
+0.05:ok: reakce na spatne argumenty (neni cislo)
+0.05:ok: reakce na spatne argumenty (zaporne cislo)
+
+====== Log z prekladu =============
+Ok
+
+====== Analyza kodu ===============
+Ok
+
+====== Log z jednotlivych testu ===
+: Level 1
+0.3:ok: pwcheck 1 1 <hesla.txt >1_0
+0.2:ok: pwcheck 1 1 <hesla_1_unsafe.txt >1_1
+0.2:ok: pwcheck 1 1 <hesla_1_safe.txt >1_2
+0.2:ok: pwcheck 1 1 <hesla_mixed.txt >1_3
+: Level 2
+0.3:ok: pwcheck 2 3 <hesla.txt >2_0
+0.2:ok: pwcheck 2 2 <hesla_2_unsafe.txt >2_1
+0.2:ok: pwcheck 2 1 <hesla_2_safe.txt >2_2
+0.2:ok: pwcheck 2 4 <hesla_mixed.txt >2_3
+: Level 3
+0.3:ok: pwcheck 3 2 <hesla.txt >3_0
+0.2:ok: pwcheck 3 1 <hesla_3_unsafe.txt >3_1
+0.2:ok: pwcheck 3 4 <hesla_3_safe.txt >3_2
+0.2:ok: pwcheck 3 3 <hesla_mixed.txt >3_3
+: Level 4
+0.3:ok: pwcheck 4 2 <hesla.txt >4_0
+0.2:ok: pwcheck 4 2 <hesla_4_unsafe.txt >4_1
+0.2:ok: pwcheck 4 4 <hesla_4_safe.txt >4_2
+0.2:ok: pwcheck 4 3 <hesla_mixed.txt >4_3
+: Statistiky + komplikovanejsi
+0.3:ok: pwcheck 2 4 --stats <hesla.txt >5_0
+0.2:ok: pwcheck 2 4 --stats <hesla_nchars.txt >5_1
+0:spatne: pwcheck 1 1 --stats <hesla_empty.txt >6_1
+# Neodpovida vzorovemu vystupu
+#   --- testdata/6_1    2021-11-05 09:15:58.091168000 +0100
+#   +++ 6_1    2021-11-05 09:33:04.514686000 +0100
+#   @@ -1,4 +1,4 @@
+#    Statistika:
+#    Ruznych znaku: 0
+#    Minimalni delka: 0
+#   -Prumerna delka: 0.0
+#   +Prumerna delka: 0
+0.2:ok: pwcheck 4 4 <hesla_overlapping.txt >6_3
+: Bonus
+Chyba, zadan spatny pocet argumentu.
+0:spatne: pwcheck --stats <hesla.txt >8_1
+# Neodpovida vzorovemu vystupu
+#   --- testdata/8_1    2021-11-05 09:15:58.109986000 +0100
+#   +++ 8_1    2021-11-05 09:33:04.535786000 +0100
+#   @@ -1,8 +0,0 @@
+#   -Password
+#   -Heslo123
+#   -Mojevelmidlouhehesloscislem0
+#   -IZP2021:fit@vut.cz
+#   -Statistika:
+#   -Ruznych znaku: 36
+#   -Minimalni delka: 8
+#   -Prumerna delka: 14.4
+Chyba, byl zadan neznamy level -l.
+0:spatne: pwcheck -l 2 <hesla.txt >8_2
+# Neodpovida vzorovemu vystupu
+#   --- testdata/8_2    2021-11-05 09:15:58.116063000 +0100
+#   +++ 8_2    2021-11-05 09:33:04.550280000 +0100
+#   @@ -1,4 +0,0 @@
+#   -Password
+#   -Heslo123
+#   -Mojevelmidlouhehesloscislem0
+#   -IZP2021:fit@vut.cz
+Chyba, zadan spatny pocet argumentu.
+0:spatne: pwcheck --stats -p 2 -l 3 <hesla.txt >8_3
+# Neodpovida vzorovemu vystupu
+#   --- testdata/8_3    2021-11-05 09:15:58.122161000 +0100
+#   +++ 8_3    2021-11-05 09:33:04.565083000 +0100
+#   @@ -1,7 +0,0 @@
+#   -Heslo123
+#   -Mojevelmidlouhehesloscislem0
+#   -IZP2021:fit@vut.cz
+#   -Statistika:
+#   -Ruznych znaku: 36
+#   -Minimalni delka: 8
+#   -Prumerna delka: 14.4
+0.2:ok: duplicitni parametr
+#   Chyba, zadan spatny pocet argumentu.
+0.1:ok: pwcheck 1 1 <hesla_empty_line.txt
+0.1:ok: pwcheck 1 1 --stats <hesla_whitespaces.txt
+0.1:ok: pwcheck 3 101 <hesla_big_level.txt
+0.1:ok: reakce na neocekavane argumenty
+#   Chyba, zadan spatny pocet argumentu.
+0.05:ok: reakce na spatne argumenty (neni cislo)
+#   Chyba, byl zadan neznamy level HELLO.
+0.05:ok: reakce na spatne argumenty (zaporne cislo)
+#   Chyba, byl zadan neznamy level -1.

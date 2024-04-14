@@ -1,0 +1,194 @@
+IZP - Hodnoceni 2. ulohy 
+
+12.2: celkem bodu
+
+====== Prehled hodnoceni ==========
+7: Hodnoceni za kvalitu kodu a obhajobu
+# Zde jsou obsazeny vsechny pripominky, ktere jsem vam
+# osobne sdelil na konci obhajoby. Spolecne s celkovym
+# dojmem z vasi obhajoby.
+: Mnoziny
+1.4:ok: prikaz empty + cteni vstupu
+0.4:ok: prikaz card
+0.4:ok: prikaz complement
+0.4:ok: prikaz union
+0.4:ok: prikaz intersect
+0.4:ok: prikaz minus
+0.4:ok: prikaz subseteq
+0:spatne: prikaz subset
+0:spatne: prikaz equals
+: Relace
+0:spatne: prikaz reflexive
+0:spatne: prikaz symmetric
+0:spatne: prikaz antisymmetric
+0:spatne: prikaz transitive
+0:spatne: prikaz function
+0.2:ok: prikaz domain
+0.2:ok: prikaz codomain
+0.2:ok: prikaz injective
+0.2:ok: prikaz surjective
+0.2:ok: prikaz bijective
+: Bonus
+0.2:ok: rozsireni: closure_ref
+0:spatne: rozsireni: closure_sym
+0:spatne: rozsireni: closure_trans
+0:spatne: rozsireni: vysledek prikazu lze pouzit dale
+0: ok: pocet alokaci 10
+0.1:ok: reakce na neexistujici soubor
+0.1:ok: reakce na spatny obsah vstupniho souboru
+0: ok: absence pametovych chyb
+
+====== Log z prekladu =============
+Ok
+
+====== Analyza kodu ===============
+Ok
+
+====== Log z jednotlivych testu ===
+: Mnoziny
+1.4:ok: prikaz empty + cteni vstupu
+0.4:ok: prikaz card
+0.4:ok: prikaz complement
+0.4:ok: prikaz union
+0.4:ok: prikaz intersect
+0.4:ok: prikaz minus
+0.4:ok: prikaz subseteq
+0:spatne: prikaz subset
+# Neodpovida vzorovemu vystupu
+#   --- testdata/subset.stdout    2021-12-17 08:49:39.657106000 +0100
+#   +++ subset.stdout.sorted    2021-12-17 16:42:43.142028000 +0100
+#   @@ -1,6 +1,5 @@
+#    U a b c d
+#    S a b d
+#    S b d
+#    S a b d
+#   -true
+#   -false
+#   +truefalse
+#   \ No newline at end of file
+0:spatne: prikaz equals
+# Neodpovida vzorovemu vystupu
+#   --- testdata/equals.stdout    2021-12-17 08:49:39.070705000 +0100
+#   +++ equals.stdout.sorted    2021-12-17 16:42:43.448359000 +0100
+#   @@ -1,6 +1,5 @@
+#    U a b c d
+#    S a b d
+#    S b d
+#    S a b d
+#   -false
+#   -true
+#   +falsetrue
+#   \ No newline at end of file
+: Relace
+0:spatne: prikaz reflexive
+# Neodpovida vzorovemu vystupu
+#   --- testdata/reflexive.stdout    2021-12-17 08:49:39.432135000 +0100
+#   +++ reflexive.stdout.sorted    2021-12-17 16:42:43.759765000 +0100
+#   @@ -1,5 +1,4 @@
+#    U a b one two
+#    R (one a) (two b)
+#    R (a a) (b b) (one one) (two two)
+#   -false
+#   -true
+#   +falsetrue
+#   \ No newline at end of file
+0:spatne: prikaz symmetric
+# Neodpovida vzorovemu vystupu
+#   --- testdata/symmetric.stdout    2021-12-17 08:49:39.874577000 +0100
+#   +++ symmetric.stdout.sorted    2021-12-17 16:42:44.066924000 +0100
+#   @@ -1,5 +1,4 @@
+#    U a b c d four one three two
+#    R (four d) (one a) (three c) (two b)
+#    R (a one) (b two) (one a) (two b)
+#   -false
+#   -true
+#   +falsetrue
+#   \ No newline at end of file
+0:spatne: prikaz antisymmetric
+# Neodpovida vzorovemu vystupu
+#   --- testdata/antisymmetric.stdout    2021-12-17 08:49:38.289530000 +0100
+#   +++ antisymmetric.stdout.sorted    2021-12-17 16:42:44.419355000 +0100
+#   @@ -1,7 +1,5 @@
+#    U a b c d four one three two
+#    R (four d) (one a) (three c) (two b)
+#    R (a one) (b two) (one a) (two b)
+#    R (a a) (one a) (one one) (two b)
+#   -true
+#   -false
+#   -true
+#   +truefalsetrue
+#   \ No newline at end of file
+0:spatne: prikaz transitive
+# Neodpovida vzorovemu vystupu
+#   --- testdata/transitive.stdout    2021-12-17 08:49:39.952922000 +0100
+#   +++ transitive.stdout.sorted    2021-12-17 16:42:44.785394000 +0100
+#   @@ -1,7 +1,5 @@
+#    U a b c d four one three two
+#    R (four d) (one a) (three c) (two b)
+#    R (a b) (c d) (one a) (one b) (two c) (two d)
+#    R (a b) (c d) (one a) (one b) (two c)
+#   -true
+#   -true
+#   -false
+#   +truetruefalse
+#   \ No newline at end of file
+0:spatne: prikaz function
+# Neodpovida vzorovemu vystupu
+#   --- testdata/function.stdout    2021-12-17 08:49:39.140683000 +0100
+#   +++ function.stdout.sorted    2021-12-17 16:42:45.135459000 +0100
+#   @@ -1,7 +1,5 @@
+#    U a b c d four one three two
+#    R (four d) (one a) (three c) (two b)
+#    R (one a) (one d) (three c) (two b)
+#    R (one a) (two a)
+#   -true
+#   -false
+#   -true
+#   +truefalsetrue
+#   \ No newline at end of file
+0.2:ok: prikaz domain
+0.2:ok: prikaz codomain
+0.2:ok: prikaz injective
+0.2:ok: prikaz surjective
+0.2:ok: prikaz bijective
+: Bonus
+0.2:ok: rozsireni: closure_ref
+0:spatne: rozsireni: closure_sym
+# Neodpovida vzorovemu vystupu
+#   --- testdata/closure_sym.stdout    2021-12-17 16:39:51.765770000 +0100
+#   +++ closure_sym.stdout.sorted    2021-12-17 16:42:47.500614000 +0100
+#   @@ -1,5 +1,5 @@
+#    U a b c d four one three two
+#    R (four d) (one a) (three c) (two b)
+#    R (a one) (b two) (one a) (two b)
+#   -R (a one) (b two) (c three) (d four) (four d) (one a) (three c) (two b)
+#   +R (four d) (one a) (three c) (two b)
+#    R (a one) (b two) (one a) (two b)
+0:spatne: rozsireni: closure_trans
+# Neodpovida vzorovemu vystupu
+#   --- testdata/closure_trans.stdout    2021-12-17 16:39:51.845422000 +0100
+#   +++ closure_trans.stdout.sorted    2021-12-17 16:42:47.803051000 +0100
+#   @@ -1,7 +1,4 @@
+#    U a b c d four one three two
+#    R (four d) (one a) (three c) (two b)
+#    R (a b) (c d) (one a) (one b) (two c) (two d)
+#    R (a b) (c d) (one a) (one b) (two c)
+#   -R (four d) (one a) (three c) (two b)
+#   -R (a b) (c d) (one a) (one b) (two c) (two d)
+#   -R (a b) (c d) (one a) (one b) (two c) (two d)
+0:spatne: rozsireni: vysledek prikazu lze pouzit dale
+# Neodpovida vzorovemu vystupu
+#   --- testdata/bonus_cmd2set.stdout    2021-12-17 16:39:51.604333000 +0100
+#   +++ bonus_cmd2set.stdout.sorted    2021-12-17 16:42:48.145607000 +0100
+#   @@ -1,5 +1,4 @@
+#    U a b c d
+#    S a b
+#    S b c
+#    S a b c
+#   -S a
+0: ok: pocet alokaci 10
+0.1:ok: reakce na neexistujici soubor
+#   Soubor nelze otevrit.
+0.1:ok: reakce na spatny obsah vstupniho souboru
+#   Chybny format souboru.
+0: ok: absence pametovych chyb
