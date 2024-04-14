@@ -1,0 +1,13 @@
+Poznámky k úkolům:
+	Black Box Testing:
+		Axiom 3: Při spuštění došlo k selhání.
+		FIND: Při spuštění došlo k selhání. (Možná příčina je opomenutí ASSERT nebo je místo něj EXPECT.)
+		INSERT: Při spuštění došlo k selhání. (Možná příčina je opomenutí ASSERT nebo je místo něj EXPECT.)
+	White Box Testing:
+		solveEquation: nedostatečně otestováno
+	Test Driven Development:
+		OK
+Detail k bodům:
+	Black Box Testing: 3.0
+	White Box Testing: 5.5
+	Test Driven Development: 6

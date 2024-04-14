@@ -1,0 +1,344 @@
+#!/bin/bash
+
+export POSIXLY_CORRECT=yes
+
+
+# Napoveda
+print_help()
+{
+    echo " "
+    echo "Usage: corona [-h]" 
+    echo "       corona [FILTERS] [COMMAND] [LOG [LOG2 [...]]"
+    echo " "
+    echo "COMMAND:"
+    echo "  infected    spocita pocet nakazenych "
+    echo "  merge       slouci nekolik souboru se zaznamy do jednoho, zachovavajici puvodni poradi (hlavicka bude ve vystupu jen jednou)"
+    echo "  gender      vypise pocet nakazenych pro jednotliva pohlavi"
+    echo "  age         vypise statistiku poctu nakazenych osob dle veku"
+    echo "  daily       vypise statistiku nakazenych osob pro jednotlive dny"
+    echo "  monthly     vypise statistiku nakazenych osob pro jednotlive mesice"
+    echo "  yearly      vypise statistiku nakazenych osob pro jednotlive roky"
+    echo "  countries   vypise statistiku nakazenych osob pro jednotlive zeme nakazy (bez CÄR, tj. kÃ³du C"
+    echo "  districts   vypise statistiku nakazenych osob pro jednotlive okresy"
+    echo "  regions     vypise statistiku nakazenych osob pro jednotlive kraje"
+    echo " "
+    echo "FILTERS:"
+    echo "  -a DATETIME     after: jsou uvazovany pouze zaznamy PO tomto datu (vcetne tohoto data) - format YYYY-MM-DD"
+    echo "  -b DATETIME     before: jsou uvazovany pouze zaznamy PRED timto datem (vcetne tohoto data)"
+    echo "  -g GENDER       jsou uvazovany pouze zaznamy nakazenych osob daneho pohlavi. GENDER muze byt M (muzi) nebo Z (zeny)"
+    echo "  -s [WIDTH]      u prikazu gender, age, daily, monthly, yearly, countries, districts a regions vypisuje data ne ciselne,"
+    echo "                  ale graficky v podobe histogramu. Nepovinny parametr WIDTH nastavuje sirku histogramu," 
+    echo "                  tedy delku nejdelsiho radku, na WIDTH. Tedy, WIDTH musi byt kladne cele cislo." 
+    echo ""
+}
+
+# Error funkce
+error_exit()
+{
+    echo "$1" 1>&2
+    exit 1
+}
+
+# Promenne
+COMMAND=""
+DATETIMEA="0000-00-00"
+DATETIMEB="9999-99-99"
+GENDER=""
+WIDTH_C=0
+WIDTH=0
+CSV_FILES=""
+GZ_FILES=""
+BZ2_FILES=""
+
+
+# Nacteni vstupu s argumenty
+while [ "$#" -gt 0 ]; do  
+    case "$1" in
+        -h)
+            print_help
+            exit 0
+            ;;
+        infected | merge | gender | age | daily | monthly | yearly | countries | districts | regions)
+            if [[ -n $COMMAND ]]; then
+                error_exit "Spatny vstup - zadany vic nez 1 command (pouzijte -h pro napovedu)." 
+            fi    
+            COMMAND="$1"
+            shift
+            ;;
+        -a)
+            if [[ -n $COMMAND ]]; then
+                error_exit "Spatny vstup - zadano [COMMAND] [FILTERS] (pouzijte -h pro napovedu)." 
+            fi 
+            if [[ $2 =~ ^[0-9]{4}-(((01|03|05|07|08|10|12)-([0-2][0-9]|3[0-1]))|((04|06|09|11)-([0-2][0-9]|30))|(02-([0-1][0-9]|2[0-9])))$ ]]; then
+                DATETIMEA="$2"
+                shift
+                shift
+            else
+                error_exit "Spatny parametr $2 (pouzijte -h pro napovedu)."
+            fi
+            ;;
+        -b)
+            if [[ -n $COMMAND ]]; then
+                error_exit "Spatny vstup - zadano [COMMAND] [FILTERS] (pouzijte -h pro napovedu)." 
+            fi    
+            if [[ $2 =~ ^[0-9]{4}-(((01|03|05|07|08|10|12)-([0-2][0-9]|3[0-1]))|((04|06|09|11)-([0-2][0-9]|30))|(02-([0-1][0-9]|2[0-9])))$ ]]; then
+                DATETIMEB="$2"
+                shift
+                shift
+            else
+                error_exit "Spatny parametr $2 (pouzijte -h pro napovedu)."
+            fi
+            ;;
+        -g)
+            if [[ -n $COMMAND ]]; then
+                error_exit "Spatny vstup - zadano [COMMAND] [FILTERS] (pouzijte -h pro napovedu)." 
+            fi    
+            if [[ $2 =~ ^[M]$ || $2 =~ ^[Z]$ ]]; then
+                GENDER="$2"
+                shift
+                shift
+            else
+                error_exit "Spatny parametr $2 (pouzijte -h pro napovedu)."
+            fi
+            ;;
+        -s) 
+            if [[ -n $COMMAND ]]; then
+                error_exit "Spatny vstup - zadano [COMMAND] [FILTERS] (pouzijte -h pro napovedu)." 
+            fi    
+            WIDTH_C=1
+            if [[ $2 =~ ^\+?[0-9]+$ ]]; then
+                WIDTH="$2"
+                shift
+            fi
+            shift
+            ;;
+        *.csv)
+            CSV_FILES+=" $1"
+            shift
+            ;;
+        *.gz)
+            GZ_FILES+=" $1"
+            shift
+            ;;
+        *.bz2)
+            BZ2_FILES+=" $1"
+            shift
+            ;;
+        *) 
+            error_exit "Neznamy vstup "$1" (pouzijte -h pro napovedu)." 
+            ;;
+    esac
+done
+
+# Nacteni souboru do promene READ_INPUT
+READ_INPUT=""
+if [[ -n $GZ_FILES ]]; then
+    if [[ -n $CSV_FILES ]]; then
+        READ_INPUT="$(gzip -d -c $GZ_FILES | cat - $CSV_FILES)"
+    else 
+        READ_INPUT="$(gzip -d -c $GZ_FILES)"
+    fi
+elif [[ -n $BZ2_FILES ]]; then
+    if [[ -n $CSV_FILES ]]; then
+        READ_INPUT="$(bzip2 -d -c $BZ2_FILES | cat - $CSV_FILES)"
+    else 
+        READ_INPUT="$(bzip2 -d -c $BZ2_FILES)"
+    fi
+elif [[ -n $CSV_FILES ]]; then
+    READ_INPUT="$(cat $CSV_FILES)"
+else
+    READ_INPUT="$(cat)"
+fi
+
+# Vyhledavani invalidnich vstupu
+INVALID_AGE=$(echo "$READ_INPUT" | awk -F ',' '{if  (NR>1 && $0 !~ /^[[:space:]]*$/ && $3 !~ /^[[:space:]]*[0-9]*[[:space:]]*$/){print "Invalid age: " $0}}')
+INVALID_DATE=$(echo "$READ_INPUT" | awk -F ',' '{if  (NR>1 && $0 !~ /^[[:space:]]*$/ && $2 !~ /^[[:space:]]*([0-9]{4}-(((01|03|05|07|08|10|12)-([0-2][0-9]|3[0-1]))|((04|06|09|11)-([0-2][0-9]|30))|(02-([0-1][0-9]|2[0-9]))))?[[:space:]]*$/){print "Invalid date: " $0}}')
+
+
+# Nacteni filtru a odmazani mezer
+READ_FILTERED=""
+if [[ -z $GENDER ]]; then
+    READ_FILTERED=$(echo "$READ_INPUT" | awk -v AFTER="$DATETIMEA" -v BEFORE="$DATETIMEB" -v ID='id' -F ',' '{if (ID!=$1 && $0 !~ /^[[:space:]]*$/ && $3 ~ /^[[:space:]]*[0-9]*[[:space:]]*$/ && $2 ~ /^[[:space:]]*([0-9]{4}-(((01|03|05|07|08|10|12)-([0-2][0-9]|3[0-1]))|((04|06|09|11)-([0-2][0-9]|30))|(02-([0-1][0-9]|2[0-9]))))?[[:space:]]*$/ && AFTER<=$2 && BEFORE>=$2) print $0}')
+else
+    READ_FILTERED=$(echo "$READ_INPUT" | awk -v AFTER="$DATETIMEA" -v BEFORE="$DATETIMEB" -v ID='id' -v GEN="$GENDER" -F ',' '{if (ID!=$1 && $0 !~ /^[[:space:]]*$/ && $3 ~ /^[[:space:]]*[0-9]*[[:space:]]*$/ && $2 ~ /^[[:space:]]*([0-9]{4}-(((01|03|05|07|08|10|12)-([0-2][0-9]|3[0-1]))|((04|06|09|11)-([0-2][0-9]|30))|(02-([0-1][0-9]|2[0-9]))))?[[:space:]]*$/ && AFTER<=$2 && BEFORE>=$2 && GEN==$4) print $0}')
+fi
+
+# Tisk podle commands
+if [[ -n $COMMAND ]]; then 
+    if [[ "$COMMAND" == 'infected' ]]; then
+        echo $(echo "$READ_FILTERED" | awk 'END {print NR}')
+    
+    elif [[ "$COMMAND" == 'merge' ]]; then
+        echo "id,datum,vek,pohlavi,kraj_nuts_kod,okres_lau_kod,nakaza_v_zahranici,nakaza_zeme_csu_kod,reportovano_khs"
+        echo $READ_FILTERED
+    
+    elif [[ "$COMMAND" == 'gender'  ]]; then
+        if [[ "$WIDTH_C" == 0 ]]; then
+            echo "$(echo "$READ_FILTERED" | awk -v M=0 -F ',' '{if ($4=="M") M++ } END {print "M: "M}')"
+            echo "$(echo "$READ_FILTERED" | awk -v Z=0 -F ',' '{if ($4=="Z") Z++ } END {print "Z: "Z}')"
+            NONE=$(echo "$READ_FILTERED" | awk -v NONE=0 -F ',' '{if ($4=="") NONE++} END {if (NONE!=0) {print "None: "NONE}}')
+            if [[ -n $NONE ]]; then
+                echo "$NONE"
+            fi
+        elif [[ "$WIDTH" == 0 ]]; then
+            echo "$(echo "$READ_FILTERED" | awk -v M=0 -v WID=100000 -F ',' '{if ($4=="M") M++ } END {{printf "M: "} {for(i=1; i*WID<=M; i++){printf "#"}}}')"
+            echo "$(echo "$READ_FILTERED" | awk -v Z=0 -v WID=100000 -F ',' '{if ($4=="Z") Z++ } END {{printf "Z: "} {for(i=1; i*WID<=Z; i++){printf "#"}}}')"
+            NONE=$(echo "$READ_FILTERED" | awk -v NONE=0 -v WID=100000 -F ',' '{if ($4=="") NONE++} END {{printf "None: "} {for(i=1; i*WID<=NONE; i++){printf "#"}}}')
+            if [[ "$NONE" != "None: " ]]; then
+                echo "$NONE"
+            fi
+        else
+            VALUE=$(echo "$READ_FILTERED" | awk -v MAX=0 -v WID="$WIDTH" -F ',' '{if ($4=="M") {M++} else if ($4=="Z") {Z++} else {NONE++}} END {{MAX=M; if (Z>MAX) {MAX=Z} if (NONE>MAX) {MAX=NONE}} print MAX/WID}')
+            echo "$(echo "$READ_FILTERED" | awk -v M=0 -v WID="$VALUE" -F ',' '{if ($4=="M") M++ } END {{printf "M: "} {for(i=1; i*WID<=M; i++){printf "#"}}}')"
+            echo "$(echo "$READ_FILTERED" | awk -v Z=0 -v WID="$VALUE" -F ',' '{if ($4=="Z") Z++ } END {{printf "Z: "} {for(i=1; i*WID<=Z; i++){printf "#"}}}')"
+            NONE=$(echo "$READ_FILTERED" | awk -v NONE=0 -v WID="$VALUE" -F ',' '{if ($4=="") NONE++} END {if (NONE!=0) {{printf "None: "} {for(i=1; i*WID<=NONE; i++){printf "#"}}}}')
+            if [[ -n $NONE ]]; then
+                echo "$NONE"
+            fi
+        fi
+    
+    elif [[ "$COMMAND" == 'age' ]]; then
+        if [[ "$WIDTH_C" == 0 ]]; then
+            echo "$(echo "$READ_FILTERED" | awk -v A=0 -v B=0 -v C=0 -v D=0 -v E=0 -v F=0 -v G=0 -v H=0 -v I=0 -v J=0 -v K=0 -v L=0 -F ',' '{if ($3=="") {NONE++} else if($3<=5) {A++} else if($3<=15) {B++} else if($3<=25) {C++} else if($3<=35) {D++} else if($3<=45) {E++} else if($3<=55) {F++} else if($3<=65) {G++} else if($3<=75) {H++} else if($3<=85) {I++} else if($3<=95) {J++} else if($3<=105) {K++} else {L++}} END {{print "0-5   : "A} {print "6-15  : "B} {print "16-25 : "C} {print "26-35 : "D} {print "36-45 : "E} {print "46-55 : "F} {print "56-65 : "G} {print "66-75 : "H} {print "76-85 : "I} {print "86-95 : "J} {print "96-105: "K} {print ">105  : "L} if (NONE!=0) {print "None  : "NONE}}')"
+        elif [[ "$WIDTH" == 0 ]]; then
+            echo "$(echo "$READ_FILTERED" | awk -v A=0 -v B=0 -v C=0 -v D=0 -v E=0 -v F=0 -v G=0 -v H=0 -v I=0 -v J=0 -v K=0 -v L=0 -v WID=10000 -F ',' '{if ($3=="") {NONE++} else if($3<=5) {A++} else if($3<=15) {B++} else if($3<=25) {C++} else if($3<=35) {D++} else if($3<=45) {E++} else if($3<=55) {F++} else if($3<=65) {G++} else if($3<=75) {H++} else if($3<=85) {I++} else if($3<=95) {J++} else if($3<=105) {K++} else {L++}} END {{printf "0-5   : "; {for(i=1; i*WID<=A; i++) {printf "#"} } print""} {printf "6-15  : "; {for(i=1; i*WID<=B; i++){printf "#"} }print"";} {printf "16-25 : "; {for(i=1; i*WID<=C; i++){printf "#"} } print"";}{printf "26-35 : "; {for(i=1; i*WID<=D; i++){printf "#"} } print"";} {printf "36-45 : ";{for(i=1; i*WID<=E; i++){printf "#"} }print"";} {printf "46-55 : ";{for(i=1; i*WID<=F; i++){printf "#"} }print"";} {printf "56-65 : ";{for(i=1; i*WID<=G; i++){printf "#"} }print"";} {printf "66-75 : "; {for(i=1; i*WID<=H; i++){printf "#"} }print"";} {printf "76-85 : "; {for(i=1; i*WID<=I; i++){printf "#"} }print"";} {printf "86-95 : "; {for(i=1; i*WID<=J; i++){printf "#"} }print"";} {printf "96-105: ";{for(i=1; i*WID<=K; i++){printf "#"} }print"";} {printf ">105  : "; {for(i=1; i*WID<=L; i++){printf "#"} }print"";} if (NONE!=0) {printf "None  : ";{for(i=1; i*WID<=NONE; i++){printf "#"} }print"";} }')"
+        else
+            VALUE=$(echo "$READ_FILTERED" | awk -v MAX=0 -v WID="$WIDTH" -v A=0 -v B=0 -v C=0 -v D=0 -v E=0 -v F=0 -v G=0 -v H=0 -v I=0 -v J=0 -v K=0 -v L=0 -F ',' '{if ($3=="") {NONE++} else if($3<=5) {A++} else if($3<=15) {B++} else if($3<=25) {C++} else if($3<=35) {D++} else if($3<=45) {E++} else if($3<=55) {F++} else if($3<=65) {G++} else if($3<=75) {H++} else if($3<=85) {I++} else if($3<=95) {J++} else if($3<=105) {K++} else {L++}} END {{if(MAX<A){MAX=A} if(MAX<B){MAX=B} if(MAX<C){MAX=C} if(MAX<D){MAX=D} if(MAX<E){MAX=E} if(MAX<F){MAX=F} if(MAX<G){MAX=G} if(MAX<H){MAX=H} if(MAX<I){MAX=I} if(MAX<J){MAX=J} if(MAX<K){MAX=K} if(MAX<L){MAX=L} if(MAX<NONE){MAX=NONE}} print MAX/WID }')
+            echo "$(echo "$READ_FILTERED" | awk -v A=0 -v B=0 -v C=0 -v D=0 -v E=0 -v F=0 -v G=0 -v H=0 -v I=0 -v J=0 -v K=0 -v L=0 -v WID="$VALUE" -F ',' '{if ($3=="") {NONE++} else if($3<=5) {A++} else if($3<=15) {B++} else if($3<=25) {C++} else if($3<=35) {D++} else if($3<=45) {E++} else if($3<=55) {F++} else if($3<=65) {G++} else if($3<=75) {H++} else if($3<=85) {I++} else if($3<=95) {J++} else if($3<=105) {K++} else {L++}} END {{printf "0-5   : "; {for(i=1; i*WID<=A; i++) {printf "#"} } print""} {printf "6-15  : "; {for(i=1; i*WID<=B; i++){printf "#"} }print"";} {printf "16-25 : "; {for(i=1; i*WID<=C; i++){printf "#"} } print"";}{printf "26-35 : "; {for(i=1; i*WID<=D; i++){printf "#"} } print"";} {printf "36-45 : ";{for(i=1; i*WID<=E; i++){printf "#"} }print"";} {printf "46-55 : ";{for(i=1; i*WID<=F; i++){printf "#"} }print"";} {printf "56-65 : ";{for(i=1; i*WID<=G; i++){printf "#"} }print"";} {printf "66-75 : "; {for(i=1; i*WID<=H; i++){printf "#"} }print"";} {printf "76-85 : "; {for(i=1; i*WID<=I; i++){printf "#"} }print"";} {printf "86-95 : "; {for(i=1; i*WID<=J; i++){printf "#"} }print"";} {printf "96-105: ";{for(i=1; i*WID<=K; i++){printf "#"} }print"";} {printf ">105  : "; {for(i=1; i*WID<=L; i++){printf "#"} }print"";} if (NONE!=0) {printf "None  : ";{for(i=1; i*WID<=NONE; i++){printf "#"} }print"";} }')"
+        fi
+    
+    elif [[ "$COMMAND" == 'daily' ]]; then
+        if [[ "$WIDTH_C" == 0 ]]; then
+            echo "$(echo "$READ_FILTERED" | awk -F ',' '{if ($2!="") {a[$2]++}} END {{for(k in a) {print k": "a[k]}}}' | sort)"
+            NONE=$(echo "$READ_FILTERED" | awk -v NONE=0 -F ',' '{if ($2=="") NONE++} END {if (NONE!=0) {print "None: "NONE}}')
+            if [[ -n $NONE ]]; then
+                echo "$NONE"
+            fi
+        elif [[ "$WIDTH" == 0 ]]; then
+            echo "$(echo "$READ_FILTERED" | awk -v WID=500 -F ',' '{if ($2!="") {a[$2]++}} END {{for(k in a) {{printf "%s: ",k} {for(i=1; i*WID<=a[k]; i++) {printf "#"}} print ""}}}' | sort)"
+            NONE=$(echo "$READ_FILTERED" | awk -v NONE=0 -v WID=500 -F ',' '{if ($2=="") NONE++} END {{printf "None: "} {for(i=1; i*WID<=NONE; i++){printf "#"}}}')
+            if [[ "$NONE" != "None: " ]]; then
+                echo "$NONE"
+            fi
+        else
+            VALUE=$(echo "$READ_FILTERED" | awk -v MAX=0 -v WID="$WIDTH" -F ',' '{{a[$2]++}} END {MAX=0; {for(k in a) {if (a[k]>MAX) {MAX=a[k]}}} print MAX/WID}')
+            echo "$(echo "$READ_FILTERED" | awk -v WID="$VALUE" -F ',' '{if ($2!="") {a[$2]++}} END {{for(k in a) {{printf "%s: ",k} {for(i=1; i*WID<=a[k]; i++) {printf "#"}} print ""}}}' | sort)"
+            NONE=$(echo "$READ_FILTERED" | awk -v NONE=0 -v WID="$VALUE" -F ',' '{if ($2=="") NONE++} END {if (NONE!=0){{printf "None: "} {for(i=1; i*WID<=NONE; i++){printf "#"}}}}')
+            if [[ -n $NONE ]]; then
+                echo "$NONE"
+            fi
+        fi
+    
+    elif [[ "$COMMAND" == 'monthly' ]]; then
+        if [[ "$WIDTH_C" == 0 ]]; then
+            echo "$(echo "$READ_FILTERED" | awk -F ',' '{if (substr($2,1,7)!="") {a[substr($2,1,7)]++}} END {{for(k in a) {print k": "a[k]}}}' | sort)"
+            NONE=$(echo "$READ_FILTERED" | awk -v NONE=0 -F ',' '{if ($2=="") NONE++} END {if (NONE!=0) {print "None: "NONE}}')
+            if [[ -n $NONE ]]; then
+                echo "$NONE"
+            fi
+        elif [[ "$WIDTH" == 0 ]]; then
+            echo "$(echo "$READ_FILTERED" | awk -v WID=10000 -F ',' '{if (substr($2,1,7)!="") {a[substr($2,1,7)]++}} END {{for(k in a) {{printf "%s: ",k} {for(i=1; i*WID<=a[k]; i++) {printf "#"}} print ""}}}' | sort)"
+            NONE=$(echo "$READ_FILTERED" | awk -v NONE=0 -v WID=10000 -F ',' '{if ($2=="") NONE++} END {{printf "None: "} {for(i=1; i*WID<=NONE; i++){printf "#"}}}')
+            if [[ "$NONE" != "None: " ]]; then
+                echo "$NONE"
+            fi
+        else
+            VALUE=$(echo "$READ_FILTERED" | awk -v MAX=0 -v WID="$WIDTH" -F ',' '{{a[substr($2,1,7)]++}} END {MAX=0; {for(k in a) {if (a[k]>MAX) {MAX=a[k]}}} print MAX/WID}')
+            echo "$(echo "$READ_FILTERED" | awk -v WID="$VALUE" -F ',' '{if (substr($2,1,7)!="") {a[substr($2,1,7)]++}} END {{for(k in a) {{printf "%s: ",k} {for(i=1; i*WID<=a[k]; i++) {printf "#"}} print ""}}}' | sort)"
+            NONE=$(echo "$READ_FILTERED" | awk -v NONE=0 -v WID="$VALUE" -F ',' '{if ($2=="") NONE++} END {if (NONE!=0) {{printf "None: "} {for(i=1; i*WID<=NONE; i++){printf "#"}}}}')
+            if [[ -n $NONE ]]; then
+                echo "$NONE"
+            fi
+        fi
+    
+    elif [[ "$COMMAND" == 'yearly' ]]; then
+        if [[ "$WIDTH_C" == 0 ]]; then
+            echo "$(echo "$READ_FILTERED" | awk -F ',' '{if (substr($2,1,4)!="") {a[substr($2,1,4)]++}} END {{for(k in a) {print k": "a[k]}}}' | sort)"
+            NONE=$(echo "$READ_FILTERED" | awk -v NONE=0 -F ',' '{if ($2=="") NONE++} END {if (NONE!=0) {print "None: "NONE}}')
+            if [[ -n $NONE ]]; then
+                echo "$NONE"
+            fi
+        elif [[ "$WIDTH" == 0 ]]; then
+            echo "$(echo "$READ_FILTERED" | awk -v WID=100000 -F ',' '{if (substr($2,1,4)!="") {a[substr($2,1,4)]++}} END {{for(k in a) {{printf "%s: ",k} {for(i=1; i*WID<=a[k]; i++) {printf "#"}} print ""}}}' | sort)"
+            NONE=$(echo "$READ_FILTERED" | awk -v NONE=0 -v WID=100000 -F ',' '{if ($2=="") NONE++} END {{printf "None: "} {for(i=1; i*WID<=NONE; i++){printf "#"}}}')
+            if [[ "$NONE" != "None: " ]]; then
+                echo "$NONE"
+            fi
+        else
+            VALUE=$(echo "$READ_FILTERED" | awk -v MAX=0 -v WID="$WIDTH" -F ',' '{{a[substr($2,1,4)]++}} END {MAX=0; {for(k in a) {if (a[k]>MAX) {MAX=a[k]}}} print MAX/WID}')
+            echo "$(echo "$READ_FILTERED" | awk -v WID="$VALUE" -F ',' '{if (substr($2,1,4)!="") {a[substr($2,1,4)]++}} END {{for(k in a) {{printf "%s: ",k} {for(i=1; i*WID<=a[k]; i++) {printf "#"}} print ""}}}' | sort)"
+            NONE=$(echo "$READ_FILTERED" | awk -v NONE=0 -v WID="$VALUE" -F ',' '{if ($2=="") NONE++} END {if (NONE!=0) { {printf "None: "} {for(i=1; i*WID<=NONE; i++){printf "#"}}}}')
+            if [[ -n $NONE ]]; then
+                echo "$NONE"
+            fi
+        fi
+    
+    elif [[ "$COMMAND" == 'countries' ]]; then
+        if [[ "$WIDTH_C" == 0 ]]; then
+            echo "$(echo "$READ_FILTERED" | awk -F ',' '{if ($8!="") {a[$8]++}} END {{for(k in a) {print k": "a[k]}}}' | sort)"
+        elif [[ "$WIDTH" == 0 ]]; then
+            echo "$(echo "$READ_FILTERED" | awk -v WID=100 -F ',' '{if ($8!="") {a[$8]++}} END {{for(k in a) {{printf "%s: ",k} {for(i=1; i*WID<=a[k]; i++) {printf "#"}} print ""}}}' | sort)"
+        else 
+            VALUE=$(echo "$READ_FILTERED" | awk -v MAX=0 -v WID="$WIDTH" -F ',' '{if ($8!="") {a[$8]++}} END {MAX=0; {for(k in a) {if (a[k]>MAX) {MAX=a[k]}}} print MAX/WID}')
+            echo "$(echo "$READ_FILTERED" | awk -v WID="$VALUE" -F ',' '{if ($8!="") {a[$8]++}} END {{for(k in a) {{printf "%s: ",k} {for(i=1; i*WID<=a[k]; i++) {printf "#"}} print ""}}}' | sort)"
+        fi
+    
+    elif [[ "$COMMAND" == 'districts' ]]; then
+        if [[ "$WIDTH_C" == 0 ]]; then
+            echo "$(echo "$READ_FILTERED" | awk -F ',' '{if ($6!="") {a[$6]++}} END {{for(k in a) {print k": "a[k]}}}' | sort)"
+            NONE=$(echo "$READ_FILTERED" | awk -v NONE=0 -F ',' '{if ($6=="") NONE++} END {if (NONE!=0) {print "None: "NONE}}')
+            if [[ -n $NONE ]]; then
+                echo "$NONE"
+            fi
+        elif [[ "$WIDTH" == 0 ]]; then
+            echo "$(echo "$READ_FILTERED" | awk -v WID=1000 -F ',' '{if ($6!="") {a[$6]++}} END {{for(k in a) {{printf "%s: ",k} {for(i=1; i*WID<=a[k]; i++) {printf "#"}} print ""}}}' | sort)"
+            NONE=$(echo "$READ_FILTERED" | awk -v NONE=0 -v WID=1000 -F ',' '{if ($6=="") NONE++} END {{printf "None: "} {for(i=1; i*WID<=NONE; i++){printf "#"}}}')
+            if [[ "$NONE" != "None: " ]]; then
+                echo "$NONE"
+            fi
+        else
+            VALUE=$(echo "$READ_FILTERED" | awk -v MAX=0 -v WID="$WIDTH" -F ',' '{a[$6]++} END {MAX=0; {for(k in a) {if (a[k]>MAX) {MAX=a[k]}}} print MAX/WID}')
+            echo "$(echo "$READ_FILTERED" | awk -v WID="$VALUE" -F ',' '{if ($6!="") {a[$6]++}} END {{for(k in a) {{printf "%s: ",k} {for(i=1; i*WID<=a[k]; i++) {printf "#"}} print ""}}}' | sort)"
+            NONE=$(echo "$READ_FILTERED" | awk -v NONE=0 -v WID="$VALUE" -F ',' '{if ($6=="") NONE++} END {if (NONE!=0) { {printf "None: "} {for(i=1; i*WID<=NONE; i++){printf "#"}}}}')
+            if [[ -n $NONE ]]; then
+                echo "$NONE"
+            fi
+        fi
+    
+    elif [[ "$COMMAND" == 'regions' ]]; then
+        if [[ "$WIDTH_C" == 0 ]]; then
+            echo "$(echo "$READ_FILTERED" | awk -F ',' '{if ($5!="") {a[$5]++}} END {{for(k in a) {print k": "a[k]}}}' | sort)"
+            NONE=$(echo "$READ_FILTERED" | awk -v NONE=0 -F ',' '{if ($5=="") NONE++} END {if (NONE!=0) {print "None: "NONE}}')
+            if [[ -n $NONE ]]; then
+                echo "$NONE"
+            fi
+        elif [[ "$WIDTH" == 0 ]]; then
+            echo "$(echo "$READ_FILTERED" | awk -v WID=10000 -F ',' '{if ($5!="") {a[$5]++}} END {{for(k in a) {{printf "%s: ",k} {for(i=1; i*WID<=a[k]; i++) {printf "#"}} print ""}}}' | sort)"
+            NONE=$(echo "$READ_FILTERED" | awk -v NONE=0 -v WID=10000 -F ',' '{if ($5=="") NONE++} END {{printf "None: "} {for(i=1; i*WID<=NONE; i++){printf "#"}}}')
+            if [[ "$NONE" != "None: " ]]; then
+                echo "$NONE"
+            fi
+        else
+            VALUE=$(echo "$READ_FILTERED" | awk -v MAX=0 -v WID="$WIDTH" -F ',' '{a[$5]++} END {MAX=0; {for(k in a) {if (a[k]>MAX) {MAX=a[k]}}} print MAX/WID}')
+            echo "$(echo "$READ_FILTERED" | awk -v WID="$VALUE" -F ',' '{if ($5!="") {a[$5]++}} END {{for(k in a) {{printf "%s: ",k} {for(i=1; i*WID<=a[k]; i++) {printf "#"}} print ""}}}' | sort)"
+            NONE=$(echo "$READ_FILTERED" | awk -v NONE=0 -v WID="$VALUE" -F ',' '{if ($5=="") NONE++} END {if (NONE!=0) {{printf "None: "} {for(i=1; i*WID<=NONE; i++){printf "#"}}}}')
+            if [[ -n $NONE ]]; then
+                echo "$NONE"
+            fi
+        fi
+    fi
+else
+    echo "id,datum,vek,pohlavi,kraj_nuts_kod,okres_lau_kod,nakaza_v_zahranici,nakaza_zeme_csu_kod,reportovano_khs"
+    echo "$READ_FILTERED"
+fi
+
+# Tisk invadlidnich vstupu (pokud jsou)
+if [[ -n $INVALID_AGE ]]; then
+    echo "$INVALID_AGE" 1>&2
+fi
+if [[ -n $INVALID_DATE ]]; then
+    echo "$INVALID_DATE" 1>&2
+fi
+
+#TODO -s WIDTH
+exit 0
