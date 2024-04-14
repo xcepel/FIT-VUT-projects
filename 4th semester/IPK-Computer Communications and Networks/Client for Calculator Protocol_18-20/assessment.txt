@@ -1,0 +1,2 @@
+Textove hodnoceni:
+Koutensky - teoria - relativne stroha, do buducna rozsirit. - (-0,5) testovanie - koncepcne dobre, testov je ale relativne malo a mohli by byt detailnejsie popisane. - bibliografia - zdroje cislovat globalne, takto sa v tom velmi narocne naviguje - (-2) git - repo chyba. - (-0,5) - tcp/udp relativne velke, lepsie dekomponovat.

@@ -1,0 +1,9 @@
+	
+-1:podtečení sazby 'underfull'
+-0.2:nesprávně vysázená pomlčka (správně: \,--\, ; \,---\, ; \,–\, nebo \,—\,)
+-0.1:špatná úprava - chybí strojopisné písmo pro 'druhů' (správně např. \texttt)
+-0.1:špatná úprava - chybí vyznačení slova 'vlna'
+-0:zvýraznění neděláno pomocí \emph (např. u 'nezlomitelnou mezerou')
+-0:vlnka byla sázena pomocí \verb|~| --> 85:e pomocí znaku \~{} (vlnka, tilda)
+-0.2:mailová adresa nedělána pomocí href nebo url
+-0.1:nesprávně vysázené anglické uvozovky (správně např. ``text'')

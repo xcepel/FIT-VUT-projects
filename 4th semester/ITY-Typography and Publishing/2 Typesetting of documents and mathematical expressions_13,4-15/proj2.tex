@@ -1,0 +1,140 @@
+%--------------------
+% Packages
+% -------------------
+\documentclass[11pt,a4paper, twocolumn]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[IL2]{fontenc}
+\usepackage{times}
+\usepackage[czech]{babel}
+\usepackage{amsthm} % theoremy
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{hyperref} %needed for hyperlink
+\usepackage[left=1.4cm, top=2.3cm, text={18.2cm, 25.2cm}]{geometry} %margins
+
+\theoremstyle{definition}
+\newtheorem{Definice}{Definice}
+\theoremstyle{definition}
+\newtheorem{Veta}{Veta}
+
+%-----------------------
+% Begin document
+%-----------------------
+\begin{document} 
+\theoremstyle{plain}
+    %-----------------------
+    % Begin title page
+    %-----------------------
+    \begin{titlepage}
+        \begin{center}
+            \Huge
+            \textsc{
+                    Vysoké učení technické v~Brně\linebreak[5.0em] 
+                \huge Fakulta informačních technologií\\
+                }
+            \vspace{\stretch{0.382}}
+            \LARGE
+                    Typografie a publikování\, --\, 2. projekt\linebreak[4.0em]
+                    Sazba dokumentů a matematických výrazů
+            \vspace{\stretch{0.618}}
+        \end{center}
+
+        {\Large 2023 \hfill Kateřina Čepelková (xcepel03)}
+    
+    \end{titlepage}
+
+
+\section*{Úvod}\label{sec:Úvod}
+V~této úloze si vyzkoušíme sazbu titulní strany, matematických vzorců, prostředí a dalších textových struktur obvyklých pro~technicky zaměřené texty -- například Definice~\ref{def:1} nebo rovnice~(\ref{eq:3}) na~straně~\pageref{def:1}. Pro~vytvoření těchto odkazů používáme kombinace příkazů \verb|\label|, \verb|\ref|, \verb|\eqref| a \verb|\pageref|. Před odkazy patří nezlomitelná mezera. pro~zvýrazňování textu jsou zde několikrát použity příkazy \verb|\verb| a \verb|\emph|. 
+
+% pro odstavec (i s odstavenim) proste prazdny radek
+Na titulní straně je použito prostředí \verb|titlepage| a sázení nadpisu podle optického středu s~využitím \emph{přesného} zlatého řezu. Tento postup byl probírán na~přednášce. Dále jsou na~titulní straně použity čtyři různé velikosti písma a mezi dvojicemi řádků textu je použito odřádkování se zadanou relativní velikostí 0,5 em a 0,4 em\footnote[1]{Nezapomeňte použít správný typ mezery mezi číslem a jednotkou.}.
+
+\section{Matematický text}\label{sec:Matematický text}
+V~této sekci se podíváme na~sázení matematických symbolů a výrazů v~plynulém textu pomocí prostředí \verb|math|. Definice a věty sázíme pomocí příkazu \verb|\newtheorem| s~využitím balíku \verb|amsthm|. Někdy je vhodné použít konstrukci \verb|${}$| nebo \verb|\mbox{}|, která říká, že (matematický) text nemá být zalomen. 
+
+
+\begin{Definice}\label{def:1}
+Zásobníkový automat (ZA) je \emph{definován} jako sedmice tvaru ${ A = (Q, \Sigma, \Gamma, \delta, q_0, Z_0, F) }$, kde: 
+\begin{itemize}
+\setlength{\itemindent}{-0.5em}
+    \item ${ Q }$ je konečná množina vnitřních (řídicích) stavů, 
+    \item ${ \Sigma }$ je konečná vstupní abeceda, 
+    \item ${ \Gamma }$ je konečná zásobníková abeceda, 
+    \item ${ \delta }$ je přechodová funkce ${Q\times(\Sigma\cup\{\epsilon\})\times\Gamma\rightarrow 2^{Q\times\Gamma^*}}$, 
+    \item $ q_0 \in Q $ je počáteční stav, ${ Z_0 \in \Gamma }$ je startovací symbol zásobníku a ${ F \subseteq Q}$ je \emph{množina} koncových stavů. 
+\end{itemize}
+
+Nechť ${ P = (Q, \Sigma, \Gamma, \delta, q_0, Z_0, F) }$  je ZA. \emph{Konfigurací} nazveme trojici ${(q, \omega, \alpha) \in Q \times \Sigma^* \times \Gamma^*}$, kde ${q}$  je aktuální stav~vnitřního řízení, ${ \omega }$  je dosud nezpracovaná část vstupního řetězce a 
+${\alpha = Z_{i1} Z_{i2} \ldots Z_{ik} }$ je obsah zásobníku.
+\end{Definice}
+
+\subsection{Podsekce obsahující definici a větu}\label{sec:Podsekce obsahující definici a větu}
+\begin{Definice}\label{def:2}
+Řetězec ${\omega}$ nad abecedou ${\Sigma}$ je přijat ZA ${A}$ \emph{jestliže} ${(q_0, \omega, Z_0) \,  \underset{A}{\overset{\ast}{\vdash}} \, (q_F, \epsilon, \gamma)}$ pro~\emph{nějaké} ${\gamma \in \Gamma^*}$ a ${q_F \in F}$. Množina ${L(A) = \{ \omega\; |\; \omega}$ je přijat ZA ${A\} \subseteq \Sigma^*}$ je jazyk přijímaný ZA ${A}$.
+\end{Definice}
+
+\begin{Veta}\label{veta1}
+\emph{Třída jazyků, které jsou přijímány ZA, odpovídá} bezkontextovým jazykům.
+\end{Veta}
+
+\section{Rovnice}\label{sec:Rovnice}
+Složitější matematické formulace sázíme mimo plynulý text pomocí prostředí \verb|displaymath|. Lze umístit i několik výrazů na~jeden řádek, ale pak je třeba tyto vhodně oddělit, například příkazem \verb|\quad|. 
+\begin{displaymath} 
+1^{2^3} \neq \Delta^1_{\Delta^2_{\Delta^3}} 
+\quad  
+y^{11}_{22} - \sqrt[9]{x+\sqrt[7]{y}}
+\quad
+x > y_1 \leq y^2
+\end{displaymath}
+V~rovnici (\ref{eq:2}) jsou využity tři typy závorek s~různou \emph{explicitně} definovanou velikostí. Také nepřehlédněte, že nasledující tři rovnice mají zarovnaná rovnítka, a použijte k~tomuto účelu vhodné prostředí. 
+\begin{eqnarray}
+-\cos^2\beta &=& \frac{\frac{\frac{1}{x} + \frac{1}{3}}{y} + 1000}{\prod\limits^8_{j=2} q_j} \label{eq:1} \\  
+\bigg(\, \Big\{ b * \big[\, 3 \div 4 \big]\, \circ a \Big\}^{\frac{2}{3}} \bigg)\, &=& \log_{10}x  \label{eq:2} \\
+\int_a^b f(x)\,\mathrm{d}x &=& \int_c^d f(y)\,\mathrm{d}y \label{eq:3}
+\end{eqnarray}
+V~této větě vidíme, jak vypadá implicitní vysázení limity ${ \lim_{m \to \infty} f(m) }$ v~normálním odstavci textu. Podobně je to i s~dalšími symboly jako ${ \bigcup_{N \in \mathcal{M}} N }$ či ${ \sum_{i=1}^m x_i^2 }$. S~vynucením méně úsporné sazby příkazem \verb|\limits| budou vzorce vysázeny v~podobě ${ \lim\limits_{m \to \infty} f(m) }$ a $ \sum\limits_{i=1}^m x_i^4 $. 
+
+\section{Matice}\label{sec:Matice}
+Pro sázení matic se velmi často používá prostředí \verb|array| a závorky (\verb|\left|, \verb|\right|). 
+\begin{displaymath}
+    \textbf{B} =
+    \left|
+    \begin{array}{cccc}
+       b_{11} & b_{12} &  \cdots & b_{1n} \\
+       b_{21} & b_{22} &  \cdots  & b_{2n} \\
+       \vdots  & \vdots  & \ddots  &  \vdots \\
+       b_{m1} & b_{m2} &  \cdots & b_{mn}
+    \end{array}
+    \right|
+    =
+    \left|
+    \begin{array}{cc}
+       t & u \\
+       v & w 
+    \end{array}
+    \right|
+    = tw - uv
+\end{displaymath}
+
+\begin{displaymath}
+    \mathbb{X} = \textbf{Y} \Longleftrightarrow 
+    \left[ 
+    \begin{array}{ccc}
+     & \Omega + \Delta & \hat{\psi}\\
+    \vec{\pi} & \omega &  
+    \end{array} 
+    \right]
+\neq 42
+\end{displaymath} 
+
+\paragraph{} Prostředí \verb|array| lze úspěšně využít i jinde, například na~pravé straně následující rovnice. Kombinační číslo na~levé straně vysázejte pomocí příkazu \verb|\binom|.
+\begin{displaymath}
+     \binom{n}{k} = \left\{
+        \begin{array}{c l}
+        0 & \text{pro } k < 0 \\
+        \frac{n!}{k!(n-k)!} & \text{pro } 0 \leq k \leq n \\
+        0 & \text{pro } k > 0 \
+    \end{array} \right.
+\end{displaymath}
+\end{document}

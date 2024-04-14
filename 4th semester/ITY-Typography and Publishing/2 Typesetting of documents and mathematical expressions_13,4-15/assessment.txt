@@ -1,0 +1,10 @@
+	
+-0.2:nesprávně vysázená pomlčka (správně: \,--\, ; \,---\, ; \,–\, nebo \,—\,)
+-0.2:chybí nezlomitelné mezery (tildy, vlnky) pro spojku 'a' --> 48:rců, prostředí a dalších textových stru
+-0.5:chybí nezlomitelné mezery (tildy, vlnky) před příkazem \ref, \eqref a/nebo \pageref --> 90:V~rovnici (\ref{eq:2}) jsou vy
+-0.5:nadbytečné nezlomitelné mezery tam, kde nepatří --> 48:ktur obvyklých pro~technicky zaměř
+-0.5:titulní strana - nepoužita explicitní velikost řádku (0.5em a 0.4em)
+-0.1:chybí použití symbolu \star
+-0.2:mezi číslem a jednotkou píšeme zůženou mezeru (např. 0{,}4\,em a 0{,}3\,em) --> stí 0,5 em a 0,4 em\footnote[1]{Ne
+0.1: korekce: pomlcka skoro
+0.5: korekce: explicitní velikost řádku

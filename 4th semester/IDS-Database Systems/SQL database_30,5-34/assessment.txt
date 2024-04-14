@@ -1,0 +1,9 @@
+1 - 4.5/5
+Flotila je na orbitě 0 nebo 1 planety, jinak OK.
+
+2 - 4/5
+U řady tabulek (M:M, specializace) chybí primární klíče.
+
+3 - 5/5
+
+4 - 17/19
