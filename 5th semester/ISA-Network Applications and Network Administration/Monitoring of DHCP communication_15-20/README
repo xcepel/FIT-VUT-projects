@@ -1,0 +1,35 @@
+Projekt:
+	Monitorování DHCP komunikace (ISA)
+
+Autor: 
+	Kateřina Čepelková, xcepel03
+
+Datum: 
+	12. listopadu 2023
+
+Popis programu:
+	Program má za úkol monitorovat obsazenost síťových adres pomocí sledování DHCP paketů. Lze ho spustit na uživatelem zvoleném síťovém rozhraní, na kterém bude naslouchat a aktualizovat statistiky dle přicházejících paketů. Alternativně může také zpracovat pcap soubor a generovat statistiku z uloženého záznamu síťové komunikace. 
+	Statistika je generována v příkazovém řádku ve formátu IP prefix – Maximální množství alokovaných IP adres – Počet alokovaných IP adres – Úroveň vytížení (%).
+	V případě, že počet alokovaných adres v prefixu překročí 50%, program tuto informaci zaloguje skrz syslog mechanismus do logu a na standartní výstup.
+
+Rozšíření:
+	-
+
+Omezení:
+	Je nutné zadat pouze jeden z dvojice přepínačů [-r <filename>] a [-i <interface-name>] s pouze jedním souborem/interface.
+	Nejsou řešeny release zprávy.
+
+Příklad spuštění:
+	./dhcp-stats [-r <filename>] [-i <interface-name>] <ip-prefix> [ <ip-prefix> [ ... ] ] 
+	- online verze (sledování sítě):
+		/dhcp-stats -i enp0s3 192.168.1.0/24 192.168.1.0/24 192.168.0.0/22 172.16.32.0/24
+	- offline verze (čtení ze souboru):
+		./dhcp-stats -r test.pcap 192.168.1.0/24 172.16.32.0/24
+
+Seznam odevzdaných souborů:
+	- xcepel03.tar 
+		- Makefile 
+		- dhcp-stats.cpp 
+		- dhcp-stats.1 
+		- manual.pdf
+		- README

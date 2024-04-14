@@ -1,0 +1,31 @@
+.TH DHCP-STATS 1
+.SH NAME
+dhcp-stats - Monitor and display DHCP occupancy for specific IP prefixes.
+.SH SYNOPSIS
+.B dhcp-stats
+[-r filename] [\ -i interface-name] ip-prefix [ip-prefix [...]]
+.SH DESCRIPTION
+.B dhcp-stats
+command is a tool for monitoring and displaying DHCP occupancy for specific IP prefixes on given network interface or in given file.
+.SH OPTIONS
+Only one of these options is expected to be filled.
+.TP
+.B -r filename
+Read packets from a specified file of format .pcap. Offline version.
+.TP
+.B -i interface-name
+Monitor packets on specified network interface. Online version.
+.SH ARGUMENTS
+.B  ip-prefix
+.TP
+Specify one or more (separated by spaces) IP prefixes for which you want to monitor DHCP statistics.
+.SH EXAMPLES
+To display DHCP statistics for the 'eth0' interface and the IP prefixes '192.168.1.0/24' and '10.0.0.0/16', run:
+.TP
+.B $ ./dhcp-stats -i eth0 192.168.1.0/24 10.0.0.0/16
+.TP
+To display DHCP statistics for file dhcp.pcap and the IP prefixes '192.168.1.0/24' and '10.0.0.0/16', run:
+.TP
+.B $ ./dhcp-stats -r dhcp.pcap 192.168.1.0/24 10.0.0.0/16
+.SH AUTHOR
+This manual page was written by Katerina Cepelkova, xcepel03.
